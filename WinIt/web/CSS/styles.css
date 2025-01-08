@@ -1,0 +1,136 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navigation Bar Styles */
+.navbar {
+    background-color: #0056D2; /* Updated color */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.navbar-logo img {
+    height: 40px;
+}
+
+.navbar-links {
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-links li {
+    display: inline;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.navbar-links a:hover {
+    text-decoration: underline;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-bar {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+}
+
+.logout-icon img {
+    height: 24px;
+    cursor: pointer;
+}
+
+/* Container for Item Details */
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    color: #0056D2; /* Updated color */
+}
+
+a.back-link {
+    text-decoration: none;
+    color: #0056D2; /* Updated color */
+    font-size: 14px;
+}
+
+.item-details {
+    display: flex;
+    gap: 20px;
+}
+
+.item-details img {
+    width: 200px;
+    border-radius: 8px;
+}
+
+button {
+    background-color: #0056D2; /* Updated color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0041A1; /* Slightly darker shade for hover */
+}
+
+.description, .seller-info {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+#time-remaining {
+    font-weight: bold;
+    color: #ff4500;
+}
+
+/* Additional Light Blue Colors */
+body {
+    background-color: #f0f8ff;
+}
+
+.navbar {
+    background-color: #5cacee;
+}
+
+button {
+    background-color: #58a6ff;
+}
+
+button:hover {
+    background-color: #4f95e1;
+}
+
+a.back-link {
+    color: #0056D2; /* Updated color */
+}
