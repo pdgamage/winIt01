@@ -13,6 +13,15 @@
         <title>categories</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://unpkg.com/@heroicons/react@2.0.16/dist/heroicons.min.js"></script>
+        
+        <style>
+            .hover-gold:hover {
+                color: #F5A623; /* Gold hover effect */
+            }
+            .active-link {
+                color: #F5A623; /* Gold color for active link */
+            }
+        </style>
     </head>
     <body class="bg-gray-100">
         <!-- Navbar -->
@@ -32,10 +41,10 @@
                 </div>
                 <!-- Navigation Links -->
                 <div class="flex space-x-14 items-center">
-                    <a href="liveAc.jsp" class="hover-gold text-[20px] font-bold">Live</a>
-                    <a href="categories.jsp" class="hover-gold text-[20px] font-bold">Categories</a>
-                    <a href="topPicks.jsp" class="hover-gold text-[20px] font-bold">Top Picks</a>
-                    <a href="../item.jsp" class="hover-gold text-[20px] font-bold">Sell an Item</a>
+                    <a href="liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Live</a>
+                    <a href="categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Categories</a>
+                    <a href="topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Top Picks</a>
+                    <a href="../item.jsp" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Sell an Item</a>
                     <a href="#" class="flex items-center w-8 h-8">
                         <img src="../resources/images/howItWork/user.png" alt="User Icon"/>
                     </a>

@@ -13,7 +13,7 @@
 
     User user = new User(email, password);
     if (user.authenticate(DbConnector.getConnection())) {
-
+        session.setAttribute("user_id", user.getId());
         response.sendRedirect("user/dash.jsp");
     } else {
         response.sendRedirect("index.jsp?s=0");

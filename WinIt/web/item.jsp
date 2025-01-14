@@ -11,6 +11,16 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com"></script>
+        
+        <style>
+            .hover-gold:hover {
+                color: #F5A623; /* Gold hover effect */
+            }
+            .active-link {
+                color: #F5A623; /* Gold color for active link */
+            }
+        </style>
+        
     </head>
     <body class="bg-gray-100">
         <!-- Navbar -->
@@ -30,78 +40,88 @@
                 </div>
                 <!-- Navigation Links -->
                 <div class="flex space-x-14 items-center">
-                    <a href="user/liveAc.jsp" class="hover-gold text-[20px] font-bold">Live</a>
-                    <a href="user/categories.jsp" class="hover-gold text-[20px] font-bold">Categories</a>
-                    <a href="user/topPicks.jsp" class="hover-gold text-[20px] font-bold">Top Picks</a>
-                    <a href="#" class="hover-gold text-[20px] font-bold">Sell an Item</a>
+                    <a href="user/liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Live</a>
+                    <a href="user/categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Categories</a>
+                    <a href="user/topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Top Picks</a>
+                    <a href="" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Sell an Item</a>
                     <a href="#" class="flex items-center w-8 h-8">
                         <img src="images/user.png" alt="User Icon"/>
                     </a>
                 </div>
             </div>
         </nav>
-      
-        <h2><a href="user/dash.jsp"> < Back to Home</a></h2>
-        <h1>Sell an Item</h1>
-        <p>Want to sell an item? Create a listing and make the best out of it!</p>
+
         <!-- Sell Item Form -->
-        <main class="form-container">
-            <div class="image-box">
-                <img src="images/right.png" alt="Image" class="image">
+        <main class="container mx-auto px-24 py-8">
+            <div class="flex items-center text-gray-500 font-medium text-sm mt-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                <a href="user/dash.jsp" class="hover:underline">Back to Home</a>
             </div>
 
-            <form id="sellForm" action="SellItemServlet" method="post" enctype="multipart/form-data">
-
-                <div class="form-group">
-                    <label for="firstName">First Name:</label>
-                    <img src="images/first-name-icon.png" alt="FNIcon" class="form-icon">
-                    <input type="text" id="firstName" name="firstName" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="lastName">Last Name:</label>
-                    <img src="images/last-name-icon.png" alt="LNIcon" class="form-icon">
-                    <input type="text" id="lastName" name="lastName" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="contact">Contact Number:</label>
-                    <img src="images/contact-icon.png" alt="CIcon" class="form-icon">
-                    <input type="tel" id="contact" name="contact" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="category">Category:</label>
-                    <img src="images/category-icon.png" alt="CIcon" class="form-icon">
-                    <input type="text" id="category" name="category" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="price">Initial Value (LKR):</label>
-                    <img src="images/value-icon.png" alt="VIcon" class="form-icon">
-                    <input type="number" id="price" name="price" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="description">Item Description:</label>
-                    <img src="images/description-icon.png" alt="DIcon" class="form-icon">
-                    <input type="text" id="category" name="category" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="image">Item’s Photos:</label>
-                    <img src="images/Item’s Photos-icon.png" alt="IPIcon" class="form-icon">
-                    <input type="file" id="image" name="image" required>
-                </div>
-
-                <button type="submit" class="submit-btn">Create</button>
-
-            </form>
+            <h2 class="text-2xl font-bold mb-8">Sell an Item</h2>
+            <p>Want to sell an item? Create a listing and make the best out of it!</p>
+            <div class="form-container">
 
 
+                <form id="sellForm" action="SellItemServlet" method="post" enctype="multipart/form-data">
+
+                    
+
+                    <div class="form-group">
+                        <div class="image-box " >
+                        <img src="images/right.png" alt="Image" class="image">
+                    </div>
+                        <label for="firstName">First Name:</label>
+                       
+                        <input type="text" id="firstName" name="firstName" placeholder="first name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name:</label>
+                        
+                        <input type="text" id="lastName" name="lastName" placeholder="last name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact">Contact Number:</label>
+                        
+                        <input type="tel" id="contact" name="contact" placeholder="contact" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                      
+                        <input type="text" id="category" name="category" placeholder="category" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Initial Value (LKR):</label>
+                       
+                        <input type="number" id="price" name="price" placeholder="price" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Item Description:</label>
+                       
+                        <input type="text" id="category" name="category" placeholder="description" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Item’s Photos:</label>
+                       
+                        <input type="file" id="image" name="image" placeholder="image" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Create</button>
+
+                </form>
+
+            </div>
         </main>
 
-       <!-- Footer Section -->
+        <!-- Footer Section -->
         <section class="bg-[#24384B] text-white py-10 mt-40">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center">

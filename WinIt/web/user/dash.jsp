@@ -1,4 +1,19 @@
+<%@page import="app.classes.DbConnector"%>
+<%@page import="app.classes.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%!User user = new User();%>
+<%
+    if (session.getAttribute("user_id") != null) {
+        int user_id = (Integer) session.getAttribute("user_id");
+        user.setId(user_id);
+        user =  user.getUserById(DbConnector.getConnection());
+    } else {
+        
+        response.sendRedirect("../index.jsp");
+    }
+    
+
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -38,9 +53,29 @@
                     <a href="categories.jsp" class="hover-gold text-[20px] font-bold">Categories</a>
                     <a href="topPicks.jsp" class="hover-gold text-[20px] font-bold">Top Picks</a>
                     <a href="../item.jsp" class="hover-gold text-[20px] font-bold">Sell an Item</a>
-                    <a href="#" class="flex items-center w-8 h-8">
-                        <img src="../resources/images/howItWork/user.png" alt="User Icon"/>
-                    </a>
+                    <h2 class="text-[20px] text-blue-200 font-bold">Hello, <%=user.getFirstName()%> !</h2>
+
+
+
+                    <div class="relative inline-block text-left">
+                        <!-- User Icon -->
+                        <a href="#" id="userIcon" class="flex items-center w-8 h-8">
+                            <img src="../resources/images/howItWork/user.png" alt="User Icon" class="rounded-full" />
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                            <ul class="py-1">
+
+                                <li>
+                                    <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        Sign Out
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </nav>
@@ -70,28 +105,54 @@
             </div>
         </div>
 
-        <script>
-            const slides = document.querySelectorAll('.relative .absolute');
-            let currentSlide = 0;
 
-            function showSlide() {
+        <script>
+            const slides = document.querySelectorAll('.slideshow .absolute');
+            let currentSlide = 0;
+            
+            function showSlide(index) {
                 // Hide all slides
-                slides.forEach((slide) => {
+                slides.forEach((slide, i) => {
                     slide.classList.remove('opacity-100');
                     slide.classList.add('opacity-0');
+                    if (i === index) {
+                        slide.classList.remove('opacity-0');
+                        slide.classList.add('opacity-100');
+                    }
                 });
-
-                // Show the current slide
-                slides[currentSlide].classList.remove('opacity-0');
-                slides[currentSlide].classList.add('opacity-100');
-
-                // Move to the next slide
-                currentSlide = (currentSlide + 1) % slides.length;
             }
-
-            // Change slide every 3 seconds
-            setInterval(showSlide, 3500);
-            showSlide(); // Ensure the first slide is visible immediately
+            
+            function startSlideshow() {
+                setInterval(() => {
+                    currentSlide = (currentSlide + 1) % slides.length; // Loop through slides
+                    showSlide(currentSlide);
+                }, 3500); // Change slide every 3.5 seconds
+            }
+            
+// Initialize the slideshow
+            showSlide(currentSlide); // Display the first slide
+            startSlideshow();
+            
+            
+            // Get the user icon and dropdown menu
+            const userIcon = document.getElementById('userIcon');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+// Toggle dropdown visibility on click
+            userIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                dropdownMenu.classList.toggle('hidden');
+            });
+            
+// Hide dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!userIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+            
+            
+            
         </script>
 
 
@@ -205,14 +266,14 @@
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
             const cardWidth = 280 + 32; // Card width + space
-
+            
             nextBtn.addEventListener('click', () => {
                 container.scrollBy({
                     left: cardWidth * 4,
                     behavior: 'smooth'
                 });
             });
-
+            
             prevBtn.addEventListener('click', () => {
                 container.scrollBy({
                     left: -cardWidth * 4,
@@ -227,8 +288,7 @@
             <!-- Grid for Category Cards -->
             <div class="pl-20 flex gap-6 mb-4">
                 <%-- Dynamic Category Data --%>
-                <%
-                    String[][] categories = {
+                <%                    String[][] categories = {
                         {"Art", "Paintings & More", "../resources/images/categories/img1.png", "Art Category"},
                         {"Vehicles", "Cars & Boats", "../resources/images/categories/img2.png", "Vehicles Category"},
                         {"Furniture", "Modern & Classic", "../resources/images/categories/img3.png", "Furniture Category"},
@@ -238,7 +298,7 @@
                     };
                     for (String[] category : categories) {
                 %>
-                <a href="#" class="block">
+                <a href="vehicle.jsp" class="block">
                     <div class="w-40 h-[170px] bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                         <div class="h-28 flex items-center justify-center">
                             <img src="<%= category[2]%>" alt="<%= category[3]%>" class="w-4/5 h-[80%] object-contain">
@@ -304,8 +364,8 @@
                             <img src="../resources/images/howItWork/cart.png" alt="Buy or Bid Icon" class="h-16" />
                         </div>
                         <div class="text-center mt-4">
-                            <h1 class="text-lg font-bold">Buy or Bid</h1>
-                            <p class="text-sm text-gray-600">Place bids or buy items easily.</p>
+                            <h1 class="text-lg font-bold">Browse Items</h1>
+                            <p class="text-sm text-gray-600">Search and browse through items.</p>
                         </div>
                     </div>
 
@@ -361,7 +421,7 @@
                 <div class="p-4">
                     <h3 class="text-lg font-semibold mb-2">Toyota tundra - Colombo</h3>
                     <p class="text-gray-600 mb-4">
-                        LKR 10,000,000 <span class="font-bold text-blue-600 ml-[55px]">10 bids</span>
+                        LKR 10,000,000 <span class="font-bold text-blue-600 ml-[55px]">40 bids</span>
                     </p>
                     <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
                         Place your Bid
@@ -375,7 +435,7 @@
                 <div class="p-4">
                     <h3 class="text-lg font-semibold mb-2">Luxury Villa - Kandy</h3>
                     <p class="text-gray-600 mb-4">
-                        LKR 30,000,000 <span class="font-bold text-blue-600 ml-[55px]">15 bids</span>
+                        LKR 30,000,000 <span class="font-bold text-blue-600 ml-[55px]">35 bids</span>
                     </p>
                     <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
                         Place your Bid
@@ -389,7 +449,7 @@
                 <div class="p-4">
                     <h3 class="text-lg font-semibold mb-2">Beachfront Property - Galle</h3>
                     <p class="text-gray-600 mb-4">
-                        LKR 20,000,000 <span class="font-bold text-blue-600 ml-[55px]">8 bids</span>
+                        LKR 20,000,000 <span class="font-bold text-blue-600 ml-[55px]">38 bids</span>
                     </p>
                     <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
                         Place your Bid
@@ -403,7 +463,7 @@
                 <div class="p-4">
                     <h3 class="text-lg font-semibold mb-2">Mountain Retreat - Kandy</h3>
                     <p class="text-gray-600 mb-4">
-                        LKR 27,000,000  <span class="font-bold text-blue-600 ml-[55px]">5 bids</span>
+                        LKR 27,000,000  <span class="font-bold text-blue-600 ml-[55px]">35 bids</span>
                     </p>
                     <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
                         Place your Bid

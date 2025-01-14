@@ -12,9 +12,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>WinIt - Live Auctions</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        
+        <style>
+            .hover-gold:hover {
+                color: #F5A623; /* Gold hover effect */
+            }
+            .active-link {
+                color: #F5A623; /* Gold color for active link */
+            }
+        </style>
     </head>
     <body class="bg-gray-100">
-        <!-- Navbar -->
         <nav class="bg-[#0056D2] text-white">
             <div class="container mx-auto flex justify-between items-center px-4 py-3">
                 <!-- Logo -->
@@ -31,10 +39,10 @@
                 </div>
                 <!-- Navigation Links -->
                 <div class="flex space-x-14 items-center">
-                    <a href="liveAc.jsp" class="hover-gold text-[20px] font-bold">Live</a>
-                    <a href="categories.jsp" class="hover-gold text-[20px] font-bold">Categories</a>
-                    <a href="topPicks.jsp" class="hover-gold text-[20px] font-bold">Top Picks</a>
-                    <a href="../item.jsp" class="hover-gold text-[20px] font-bold">Sell an Item</a>
+                    <a href="liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Live</a>
+                    <a href="categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Categories</a>
+                    <a href="topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Top Picks</a>
+                    <a href="../item.jsp" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Sell an Item</a>
                     <a href="#" class="flex items-center w-8 h-8">
                         <img src="../resources/images/howItWork/user.png" alt="User Icon"/>
                     </a>
@@ -54,7 +62,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-center gap-6">
                 <%
                     String[] houseImages = {"../resources/images/liveAuction/img3.jpg", "../resources/images/liveAuction/img10.jpg", "../resources/images/liveAuction/img1.jpg", "../resources/images/liveAuction/img6.jpg", "../resources/images/liveAuction/img4.jpg", "../resources/images/liveAuction/img5.jpg", "../resources/images/liveAuction/img3.jpg", "../resources/images/liveAuction/img2.jpg"};
-                    String[] houseTitles = {"Modern House - Colombo", "Luxury Villa - Kandy", "Beachfront Property - Galle", "City Apartment - Colombo", "Mountain Retreat - Nuwara Eliya", "Contemporary Home - Negombo", "Seaside Bungalow - Hikkaduwa", "Lake View Villa - <br>Kandy"};
+                    String[] houseTitles = {"Modern House - <br>Colombo", "Luxury Villa - <br>Kandy", "Beachfront Property - Galle", "City Apartment - Colombo", "Mountain Retreat - Nuwara Eliya", "Contemporary Home - Negombo", "Seaside Bungalow - Hikkaduwa", "Lake View Villa - <br>Kandy"};
                     String[] housePrices = {"LKR 16,855,000", "LKR 20,000,000", "LKR 18,500,000", "LKR 15,200,000", "LKR 12,000,000", "LKR 22,500,000", "LKR 25,000,000", "LKR 19,000,000"};
                     String[] bidCounts = {"23 bids", "17 bids", "32 bids", "19 bids", "12 bids", "28 bids", "5 bids", "22 bids"};
 
