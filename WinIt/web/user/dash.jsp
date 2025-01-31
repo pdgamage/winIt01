@@ -1,12 +1,26 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.List"%>
+<%@page import="app.classes.Item"%>
 <%@page import="app.classes.DbConnector"%>
 <%@page import="app.classes.User"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%!User user = new User();%>
+<%!User user = new User();
+
+    Item item = new Item();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+%>
 <%
     if (session.getAttribute("user_id") != null) {
         int user_id = (Integer) session.getAttribute("user_id");
         user.setId(user_id);
         user =  user.getUserById(DbConnector.getConnection());
+        session.setAttribute("user_id", user_id);
+        
+        
     } else {
         
         response.sendRedirect("../index.jsp");
@@ -31,6 +45,7 @@
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     </head>
     <body class="bg-[#EEEEEE]">
+       
 
         <!-- Navbar -->
         <nav class="bg-[#0056D2] text-white">
@@ -66,12 +81,19 @@
                         <!-- Dropdown Menu -->
                         <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                             <ul class="py-1">
+                                
+                                 <li>
+                                    <a href="checkout.jsp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        Cart
+                                    </a>
+                                </li>
 
                                 <li>
-                                    <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a href="../admin/signout.jsp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         Sign Out
                                     </a>
                                 </li>
+                               
                             </ul>
                         </div>
                     </div>
@@ -171,83 +193,87 @@
             <div class="relative overflow-hidden">
 
                 <div class="flex space-x-8 overflow-x-hidden w-full pl-20" style="scroll-behavior: smooth;">
-                    <!-- Auction Card 1 -->
-                    <div class="flex-none w-[280px] h-[380px] bg-[#FCFCFC] rounded-lg shadow-lg p-4">
-                        <span class="top-0 ml-[170px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">05:07:08:29</span>
-                        <img src="../images/img1.jpg" alt="Auction Item 1" class="w-full h-[200px] object-cover rounded-lg mb-4">
-                        <h3 class="text-xl font-semibold">PlayStaion 5 - Colombo</h3>
-                        <p class="text-gray-700">LKR 200,000</p>
-                        <div class="flex justify-center">
-                            <a href="../PS5.jsp"><button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Place your bid</button></a>
-                        </div>
-                    </div>
+                    
+                <%
+                    List<Item> itemlist = item.getAllItems(DbConnector.getConnection());
+                    for (Item i : itemlist) {
+                        long auctionEndTime = 0;
+                        try {
+                            Connection conn = DbConnector.getConnection();
+                            String sql = "SELECT created_at FROM SellItems WHERE id = ?";
+                            PreparedStatement stmt = conn.prepareStatement(sql);
+                            stmt.setInt(1, i.getId());
+                            ResultSet rs = stmt.executeQuery();
 
-                    <!-- Auction Card 2 -->
-                    <div class="flex-none w-[280px] h-[380px] bg-[#FCFCFC] rounded-lg shadow-lg p-4">
-                        <span class="top-0 ml-[170px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">05:07:08:29</span>
-                        <img src="../resources/images/liveAuction/img2.jpg" alt="Auction Item 2" class="w-full h-[200px] object-cover rounded-lg mb-4">
-                        <h3 class="text-xl font-semibold">Luxury Villa - Kandy</h3>
-                        <p class="text-gray-700">LKR 10,855,000</p>
-                        <div class="flex justify-center">
-                            <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Place your bid</button>
-                        </div>
-                    </div>
+                            if (rs.next()) {
+                                Timestamp createdAt = rs.getTimestamp("created_at");
+                                if (createdAt != null) {
+                                    long createdTime = createdAt.getTime();
+                                    auctionEndTime = createdTime + (1 * 10 * 60 * 1000); // 2 hours auction
+                                }
+                            }
 
-                    <!-- Auction Card 3 -->
-                    <div class="flex-none w-[280px] h-[380px] bg-[#FCFCFC] rounded-lg shadow-lg p-4">
-                        <span class="top-0 ml-[170px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">05:07:08:29</span>
-                        <img src="../resources/images/liveAuction/img3.jpg" alt="Auction Item 3" class="w-full h-[200px] object-cover rounded-lg mb-4">
-                        <h3 class="text-xl font-semibold">Beachfront - Galle</h3>
-                        <p class="text-gray-700">LKR 13,455,000</p>
-                        <div class="flex justify-center">
-                            <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Place your bid</button>
-                        </div>
-                    </div>
+                            stmt.close();
+                            conn.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                %>
 
-                    <!-- Auction Card 4 -->
-                    <div class="flex-none w-[280px] h-[380px] bg-[#FCFCFC] rounded-lg shadow-lg p-4">
-                        <span class="top-0 ml-[170px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">05:07:08:29</span>
-                        <img src="../resources/images/liveAuction/img4.jpg" alt="Auction Item 4" class="w-full h-[200px] object-cover rounded-lg mb-4">
-                        <h3 class="text-xl font-semibold">ROG Strix G16 - Colombo</h3>
-                        <p class="text-gray-700">LKR 605,000</p>
-                        <a href="../azus.jsp"><div class="flex justify-center">
-                                <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Place your bid</button>
+                <div class="w-56 bg-white rounded-xl shadow-lg overflow-hidden h-max">
+                    <span id="countdown-<%= i.getId()%>" class="top-1 ml-[110px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">
+                        Loading...
+                    </span>
+                    <div class="relative">
+                        <img src="<%= i.getImageBase64()%>" class="w-full h-48 object-cover p-2 rounded-lg" alt="Item Image">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium text-gray-900"><%= i.getFirstName()%></h3>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="flex space-x-[35px]">
+                                <p class="font-semibold">Rs.<%= i.getPrice()%></p>
+                                <p class="text-sm text-gray-500"><%= i.getCategory()%></p>
                             </div>
+                        </div>
+                        <a href="../azus.jsp?id=<%= i.getId()%>">
+                            <button class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Place your bid</button>
                         </a>
                     </div>
+                </div>
 
-                    <!-- Auction Card 5 -->
-                    <div class="flex-none w-[280px] h-[380px] bg-[#FCFCFC] rounded-lg shadow-lg p-4">
-                        <span class="top-0 ml-[170px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">05:07:08:29</span>
-                        <img src="../resources/images/liveAuction/img5.jpg" alt="Auction Item 5" class="w-full h-[200px] object-cover rounded-lg mb-4">
-                        <h3 class="text-xl font-semibold">Honda Civic - Nuwara Eliya</h3>
-                        <p class="text-gray-700">LKR 32,845,000</p>
-                        <div class="flex justify-center">
-                            <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Place your bid</button>
-                        </div>
-                    </div>
+                <script>
+                    function startCountdown(endTime, elementId) {
+                        function updateCountdown() {
+                            var now = new Date().getTime();
+                            var timeLeft = endTime - now;
 
-                    <!-- Auction Card 6 -->
-                    <div class="flex-none w-[280px] h-[380px] bg-[#FCFCFC] rounded-lg shadow-lg p-4">
-                        <span class="top-0 ml-[170px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">05:07:08:29</span>
-                        <img src="../resources/images/liveAuction/img6.jpg" alt="Auction Item 6" class="w-full h-[200px] object-cover rounded-lg mb-4">
-                        <h3 class="text-xl font-semibold">Contemporary - Negombo</h3>
-                        <p class="text-gray-700">LKR 11,355,000</p>
-                        <div class="flex justify-center">
-                            <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Place your bid</button>
-                        </div>
-                    </div>
+                            if (timeLeft <= 0) {
+                                document.getElementById(elementId).innerHTML = "Auction Ended";
+                                clearInterval(timer);
+                                return;
+                            }
 
-                    <!-- Auction Card 7 -->
-                    <div class="flex-none w-[280px] h-[380px] bg-[#FCFCFC] rounded-lg shadow-lg p-4">
-                        <span class="top-0 ml-[170px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">05:07:08:29</span>
-                        <img src="../resources/images/liveAuction/img7.jpg" alt="Auction Item 7" class="w-full h-[200px] object-cover rounded-lg mb-4">
-                        <h3 class="text-xl font-semibold">Seaside Bungalow - Chilo</h3>
-                        <p class="text-gray-700">LKR 26,785,000</p>
-                        <div class="flex justify-center">
-                            <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Place your bid</button>
-                        </div>
-                    </div>
+                            var hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+                            var minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+                            var seconds = Math.floor((timeLeft / 1000) % 60);
+
+                            document.getElementById(elementId).innerHTML = hours + "h " + minutes + "m " + seconds + "s";
+                        }
+
+                        updateCountdown(); // Call immediately to prevent delay
+                        var timer = setInterval(updateCountdown, 1000);
+                    }
+
+                    var auctionEndTime = <%= auctionEndTime%>; // Time from server
+                    startCountdown(auctionEndTime, "countdown-<%= i.getId()%>");
+                </script>
+
+                <%
+                    }
+                %>
+           
+
+                    
                 </div>
 
                 <!-- Manual Control Buttons -->
