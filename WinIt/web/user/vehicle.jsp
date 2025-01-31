@@ -31,7 +31,7 @@
         <nav class="bg-[#0056D2] text-white">
             <div class="container mx-auto flex justify-between items-center px-4 py-3">
                 <!-- Logo -->
-                <div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div>
+                <a href="dash.jsp"><div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div></a>
                 <!-- Search Area -->
                 <div class="mr-10">
                     <div class="relative w-[480px]">
