@@ -88,27 +88,31 @@ public class User {
 
     }
 
+    // Authenticate method
     public boolean authenticate(Connection con) {
-
         try {
-
-            String query = "SELECT id, password FROM user WHERE email = ?";
+            // Query to fetch user details including role
+            String query = "SELECT id, password, role FROM user WHERE email = ?";
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.setString(1, this.email);
             ResultSet rs = pstmt.executeQuery();
+
             if (rs.next()) {
-                String db_password = rs.getString("password");
-                if (db_password.equals(this.password)) {
+                String db_password = rs.getString("password"); // Hashed password from the database
+                String role = rs.getString("role"); // Fetch the role from the database
+
+                // Compare the hashed password (use a secure password hashing library like BCrypt)
+                if (db_password.equals(this.password)) { // Implement this method
                     int user_id = rs.getInt("id");
                     this.setId(user_id);
+                    this.setRole(role); // Set the role in the User object
                     return true;
                 } else {
-                    return false;
+                    return false; // Password does not match
                 }
             } else {
-                return false;
+                return false; // User not found
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             return false;
