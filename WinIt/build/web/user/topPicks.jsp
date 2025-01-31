@@ -4,7 +4,13 @@
     Author     : DILSHAN
 --%>
 
+<%@page import="app.classes.DbConnector"%>
+<%@page import="app.classes.Item"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    int itemId = Integer.parseInt(request.getParameter("id"));
+    Item item = Item.getItemById(DbConnector.getConnection(), itemId);
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -26,7 +32,7 @@
         <nav class="bg-[#0056D2] text-white">
             <div class="container mx-auto flex justify-between items-center px-4 py-3">
                 <!-- Logo -->
-                <div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div>
+                <a href="dash.jsp"><div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div></a>
                 <!-- Search Area -->
                 <div class="mr-10">
                     <div class="relative w-[480px]">
@@ -74,7 +80,7 @@
                         <img src="<%= houseImages[i]%>" alt="<%= houseTitles[i]%>" class="w-full h-48 object-cover p-2 rounded-lg">
                     </div>
                     <div class="p-4">
-                        <h3 class="font-medium text-gray-900"><%= houseTitles[i]%></h3>
+                        <h3 class="font-medium text-gray-900"><%= item.getFirstName()%></h3>
                         <div class="flex justify-between items-center mt-2">
                             <div class="flex space-x-[35px]">
                                 <p class="font-semibold"><%= housePrices[i]%></p>
