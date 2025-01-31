@@ -11,7 +11,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com"></script>
-        
+
         <style>
             .hover-gold:hover {
                 color: #F5A623; /* Gold hover effect */
@@ -20,14 +20,14 @@
                 color: #F5A623; /* Gold color for active link */
             }
         </style>
-        
+
     </head>
     <body class="bg-gray-100">
         <!-- Navbar -->
         <nav class="bg-[#0056D2] text-white">
             <div class="container mx-auto flex justify-between items-center px-4 py-3">
                 <!-- Logo -->
-                <div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div>
+                <a href="user/dash.jsp"><div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div></a>
                 <!-- Search Area -->
                 <div class="mr-10">
                     <div class="relative w-[480px]">
@@ -40,10 +40,10 @@
                 </div>
                 <!-- Navigation Links -->
                 <div class="flex space-x-14 items-center">
-                    <a href="user/liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Live</a>
-                    <a href="user/categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Categories</a>
-                    <a href="user/topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Top Picks</a>
-                    <a href="" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Sell an Item</a>
+                    <a href="user/liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Live</a>
+                    <a href="user/categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Categories</a>
+                    <a href="user/topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Top Picks</a>
+                    <a href="" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Sell an Item</a>
                     <a href="#" class="flex items-center w-8 h-8">
                         <img src="images/user.png" alt="User Icon"/>
                     </a>
@@ -65,58 +65,74 @@
             <div class="form-container">
 
 
-                <form id="sellForm" action="SellItemServlet" method="post" enctype="multipart/form-data">
-
-                    
-
-                    <div class="form-group">
-                        <div class="image-box " >
-                        <img src="images/right.png" alt="Image" class="image">
-                    </div>
-                        <label for="firstName">First Name:</label>
-                       
-                        <input type="text" id="firstName" name="firstName" placeholder="first name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lastName">Last Name:</label>
+                <form action="SellItemServlet" method="post" enctype="multipart/form-data">
+                     <%
+                    if (request.getParameter("s") != null){
+                        String message;
+                        if(request.getParameter("s").equals("1")){
+                        message = "<h6 style='color:green'>You successfully saved item.</h6>";
+                        }else{
+                        message = "<h6 style='color:red'>Error occured.please try again</h6>";
+                        }
                         
-                        <input type="text" id="lastName" name="lastName" placeholder="last name" required>
+                       out.println(message);
+                }
+                %> 
+                    <div class="form-group">
+                        <div class="image-box">
+                            <img src="images/right.png" alt="Image" class="image">
+                        </div>
+                        <label for="firstName">Item Name:</label>
+                        <input type="text" id="firstName" name="firstName" placeholder="item name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Seller Name:</label>
+                        <input type="text" id="lastName" name="lastName" placeholder="seller name" required>
                     </div>
 
                     <div class="form-group">
                         <label for="contact">Contact Number:</label>
-                        
                         <input type="tel" id="contact" name="contact" placeholder="contact" required>
                     </div>
 
                     <div class="form-group">
                         <label for="category">Category:</label>
-                      
-                        <input type="text" id="category" name="category" placeholder="category" required>
+                        <select id="category" name="category" required>
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="Art">Art</option>
+                            <option value="Vehicles">Vehicles</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Antiques">Antiques</option>
+                            <option value="Jewelry">Jewelry</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Toys">Toys</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="RealEstate">Real Estate</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label for="price">Initial Value (LKR):</label>
-                       
-                        <input type="number" id="price" name="price" placeholder="price" required>
+                        <input type="number" id="price" name="price" step="0.01" placeholder="price" required>
                     </div>
 
                     <div class="form-group">
                         <label for="description">Item Description:</label>
-                       
-                        <input type="text" id="category" name="category" placeholder="description" required>
+                        <input type="text" id="description" name="description" placeholder="description" required>
                     </div>
 
                     <div class="form-group">
                         <label for="image">Item’s Photos:</label>
-                       
                         <input type="file" id="image" name="image" placeholder="image" required>
                     </div>
 
                     <button type="submit" class="submit-btn">Create</button>
-
                 </form>
+                
+                
+
 
             </div>
         </main>
