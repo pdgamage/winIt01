@@ -73,6 +73,45 @@
             </div>
         </section>
     </main>
+    <section class="bg-[#24384B] text-white py-10 mt-40">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <!-- Branding and Description -->
+                    <div class="mb-6 md:mb-0">
+                        <div class="flex items-center mb-4">
+                            <span class="text-2xl font-bold">Win<span class="text-red-500">It</span></span>
+                        </div>
+                        <p class="text-gray-300">WinIt is the leading global platform for online auctions, <br/>featuring local auctions happening today, this weekend, and every day. <br/>Each week, we showcase thousands of fresh listings from a network of over 15,000 auctioneers across the country.</p>
+                    </div>
+                    <!-- Quick Links -->
+                    <div class="flex flex-col md:flex-row md:space-x-10">
+                        <div class="mb-6 md:mb-0 pr-36">
+                            <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                            <ul>
+                                <li><a href="#" class="text-gray-300 hover:text-yellow-500">Create Account</a></li>
+                                <li><a href="#" class="text-gray-300 hover:text-yellow-500">Categories</a></li>
+                                <li><a href="#" class="text-gray-300 hover:text-yellow-500">Sell Online</a></li>
+                                <li><a href="#" class="text-gray-300 hover:text-yellow-500">About Us</a></li>
+                                <li><a href="#" class="text-gray-300 hover:text-yellow-500">Contact Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Copyright and Policies -->
+                <div class="flex flex-col md:flex-row justify-between items-center mt-10">
+                    <p class="text-gray-400">© WinIt 2025 | All rights reserved</p>
+                    <div class="flex space-x-4 mt-4 md:mt-0">
+                        <a href="#" class="text-gray-400 hover:text-white">Terms & Conditions</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                    </div>
+                    <div class="flex space-x-4 mt-4 md:mt-0 pr-36">
+                        <a href="#"><img src="../resources/images/howItWork/facebook.png" alt="Facebook" class="h-6"></a>
+                        <a href="#"><img src="../resources/images/howItWork/twitter.png" alt="Twitter" class="h-6"></a>
+                        <a href="#"><img src="../resources/images/howItWork/instagram.png" alt="Instagram" class="h-6"></a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
     <script>
         function startCountdown(endTime) {
@@ -108,6 +147,7 @@
         var auctionEndTime = <%= auctionEndTime %>; // Time from server
         startCountdown(auctionEndTime);
     </script>
-
+    
+    
 </body>
 </html>

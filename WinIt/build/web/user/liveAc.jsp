@@ -27,18 +27,18 @@
 
         <!-- Navbar -->
         <nav class="bg-[#0056D2] text-white">
-            <div class="container mx-auto flex justify-between items-center px-4 py-3">
+            <div class="container mx-auto flex justify-between items-center px-4 py-3 whitespace-nowrap">
                 <a href="dash.jsp"><div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div></a>
                 <div class="mr-10">
-                    <div class="relative w-[480px]">
+                    <div class="relative w-[400spx]">
                         <input type="text" class="w-full py-2 pl-10 pr-4 rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300" placeholder="Search for items..."/>
                     </div>
                 </div>
-                <div class="flex space-x-14 items-center">
-                    <a href="liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Live</a>
-                    <a href="categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Categories</a>
-                    <a href="topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Top Picks</a>
-                    <a href="../item.jsp" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Sell an Item</a>
+                <div class="flex space-x-10 items-center">
+                    <a href="liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold"%> text-[18px] font-bold">Live</a>
+                    <a href="categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold"%> text-[18px] font-bold">Categories</a>
+                    <a href="topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold"%> text-[18px] font-bold">Top Picks</a>
+                    <a href="../item.jsp" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold"%> text-[18px] font-bold">Sell an Item</a>
                     <a href="#" class="flex items-center w-8 h-8">
                         <img src="../resources/images/howItWork/user.png" alt="User Icon"/>
                     </a>
@@ -158,7 +158,7 @@
                 </div>
                 <!-- Copyright and Policies -->
                 <div class="flex flex-col md:flex-row justify-between items-center mt-10">
-                    <p class="text-gray-400">© WinIt 2024 | All rights reserved</p>
+                    <p class="text-gray-400">© WinIt 2025 | All rights reserved</p>
                     <div class="flex space-x-4 mt-4 md:mt-0">
                         <a href="#" class="text-gray-400 hover:text-white">Terms & Conditions</a>
                         <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>

@@ -17,15 +17,14 @@
     if (session.getAttribute("user_id") != null) {
         int user_id = (Integer) session.getAttribute("user_id");
         user.setId(user_id);
-        user =  user.getUserById(DbConnector.getConnection());
+        user = user.getUserById(DbConnector.getConnection());
         session.setAttribute("user_id", user_id);
-        
-        
+
     } else {
-        
+
         response.sendRedirect("../index.jsp");
     }
-    
+
 
 %>
 <!DOCTYPE html>
@@ -40,21 +39,25 @@
             .hover-gold:hover {
                 color: #F5A623; /* Gold hover effect */
             }
+            html {
+                scroll-behavior: smooth;
+            }
         </style>
 
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     </head>
     <body class="bg-[#EEEEEE]">
-       
+
 
         <!-- Navbar -->
         <nav class="bg-[#0056D2] text-white">
-            <div class="container mx-auto flex justify-between items-center px-4 py-3">
+            <div class="container mx-auto flex justify-between items-center px-4 py-3 whitespace-nowrap">
                 <!-- Logo -->
                 <div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div>
+
                 <!-- Search Area -->
                 <div class="mr-10">
-                    <div class="relative w-[480px]">
+                    <div class="relative w-[400px]">
                         <input 
                             type="text" 
                             class="w-full py-2 pl-10 pr-4 rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300" 
@@ -62,42 +65,35 @@
                             />
                     </div>
                 </div>
+
                 <!-- Navigation Links -->
-                <div class="flex space-x-14 items-center">
-                    <a href="liveAc.jsp" class="hover-gold text-[20px] font-bold">Live</a>
-                    <a href="categories.jsp" class="hover-gold text-[20px] font-bold">Categories</a>
-                    <a href="topPicks.jsp" class="hover-gold text-[20px] font-bold">Top Picks</a>
-                    <a href="../item.jsp" class="hover-gold text-[20px] font-bold">Sell an Item</a>
-                    <h2 class="text-[20px] text-blue-200 font-bold">Hello, <%=user.getFirstName()%> !</h2>
+                <div class="flex space-x-10 items-center">
+                    <a href="liveAc.jsp" class="hover-gold text-[18px] font-bold whitespace-nowrap">Live</a>
+                    <a href="#categories" class="hover-gold text-[18px] font-bold whitespace-nowrap">Categories</a>
+                    <a href="topPicks.jsp" class="hover-gold text-[18px] font-bold whitespace-nowrap">Top Picks</a>
+                    <a href="../item.jsp" class="hover-gold text-[18px] font-bold whitespace-nowrap">Sell an Item</a>
+                    <h2 class="text-[17px] text-blue-200 font-bold whitespace-nowrap">Hello, <%=user.getFirstName()%> !</h2>
 
-
-
+                    <!-- User Dropdown remains the same -->
                     <div class="relative inline-block text-left">
-                        <!-- User Icon -->
                         <a href="#" id="userIcon" class="flex items-center w-8 h-8">
                             <img src="../resources/images/howItWork/user.png" alt="User Icon" class="rounded-full" />
                         </a>
-
-                        <!-- Dropdown Menu -->
                         <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                             <ul class="py-1">
-                                
-                                 <li>
+                                <li>
                                     <a href="checkout.jsp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         Cart
                                     </a>
                                 </li>
-
                                 <li>
                                     <a href="../admin/signout.jsp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         Sign Out
                                     </a>
                                 </li>
-                               
                             </ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         </nav>
@@ -131,7 +127,7 @@
         <script>
             const slides = document.querySelectorAll('.slideshow .absolute');
             let currentSlide = 0;
-            
+
             function showSlide(index) {
                 // Hide all slides
                 slides.forEach((slide, i) => {
@@ -143,38 +139,38 @@
                     }
                 });
             }
-            
+
             function startSlideshow() {
                 setInterval(() => {
                     currentSlide = (currentSlide + 1) % slides.length; // Loop through slides
                     showSlide(currentSlide);
                 }, 3500); // Change slide every 3.5 seconds
             }
-            
+
 // Initialize the slideshow
             showSlide(currentSlide); // Display the first slide
             startSlideshow();
-            
-            
+
+
             // Get the user icon and dropdown menu
             const userIcon = document.getElementById('userIcon');
             const dropdownMenu = document.getElementById('dropdownMenu');
-            
+
 // Toggle dropdown visibility on click
             userIcon.addEventListener('click', (e) => {
                 e.preventDefault();
                 dropdownMenu.classList.toggle('hidden');
             });
-            
+
 // Hide dropdown when clicking outside
             document.addEventListener('click', (e) => {
                 if (!userIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
                     dropdownMenu.classList.add('hidden');
                 }
             });
-            
-            
-            
+
+
+
         </script>
 
 
@@ -193,87 +189,87 @@
             <div class="relative overflow-hidden">
 
                 <div class="flex space-x-8 overflow-x-hidden w-full pl-20" style="scroll-behavior: smooth;">
-                    
-                <%
-                    List<Item> itemlist = item.getAllItems(DbConnector.getConnection());
-                    for (Item i : itemlist) {
-                        long auctionEndTime = 0;
-                        try {
-                            Connection conn = DbConnector.getConnection();
-                            String sql = "SELECT created_at FROM SellItems WHERE id = ?";
-                            PreparedStatement stmt = conn.prepareStatement(sql);
-                            stmt.setInt(1, i.getId());
-                            ResultSet rs = stmt.executeQuery();
 
-                            if (rs.next()) {
-                                Timestamp createdAt = rs.getTimestamp("created_at");
-                                if (createdAt != null) {
-                                    long createdTime = createdAt.getTime();
-                                    auctionEndTime = createdTime + (1 * 10 * 60 * 1000); // 2 hours auction
+                    <%
+                        List<Item> itemlist = item.getAllItems(DbConnector.getConnection());
+                        for (Item i : itemlist) {
+                            long auctionEndTime = 0;
+                            try {
+                                Connection conn = DbConnector.getConnection();
+                                String sql = "SELECT created_at FROM SellItems WHERE id = ?";
+                                PreparedStatement stmt = conn.prepareStatement(sql);
+                                stmt.setInt(1, i.getId());
+                                ResultSet rs = stmt.executeQuery();
+
+                                if (rs.next()) {
+                                    Timestamp createdAt = rs.getTimestamp("created_at");
+                                    if (createdAt != null) {
+                                        long createdTime = createdAt.getTime();
+                                        auctionEndTime = createdTime + (1 * 10 * 60 * 1000); // 2 hours auction
+                                    }
                                 }
+
+                                stmt.close();
+                                conn.close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
+                    %>
 
-                            stmt.close();
-                            conn.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                %>
-
-                <div class="w-56 bg-white rounded-xl shadow-lg overflow-hidden h-max">
-                    <span id="countdown-<%= i.getId()%>" class="top-1 ml-[110px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">
-                        Loading...
-                    </span>
-                    <div class="relative">
-                        <img src="<%= i.getImageBase64()%>" class="w-full h-48 object-cover p-2 rounded-lg" alt="Item Image">
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-medium text-gray-900"><%= i.getFirstName()%></h3>
-                        <div class="flex justify-between items-center mt-2">
-                            <div class="flex space-x-[35px]">
-                                <p class="font-semibold">Rs.<%= i.getPrice()%></p>
-                                <p class="text-sm text-gray-500"><%= i.getCategory()%></p>
-                            </div>
+                    <div class="w-56 bg-white rounded-xl shadow-lg overflow-hidden h-max">
+                        <span id="countdown-<%= i.getId()%>" class="top-1 ml-[110px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">
+                            Loading...
+                        </span>
+                        <div class="relative">
+                            <img src="<%= i.getImageBase64()%>" class="w-full h-48 object-cover p-2 rounded-lg" alt="Item Image">
                         </div>
-                        <a href="../azus.jsp?id=<%= i.getId()%>">
-                            <button class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Place your bid</button>
-                        </a>
+                        <div class="p-4">
+                            <h3 class="font-medium text-gray-900"><%= i.getFirstName()%></h3>
+                            <div class="flex justify-between items-center mt-2">
+                                <div class="flex space-x-[35px]">
+                                    <p class="font-semibold">Rs.<%= i.getPrice()%></p>
+                                    <p class="text-sm text-gray-500"><%= i.getCategory()%></p>
+                                </div>
+                            </div>
+                            <a href="../azus.jsp?id=<%= i.getId()%>">
+                                <button class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Place your bid</button>
+                            </a>
+                        </div>
                     </div>
-                </div>
 
-                <script>
-                    function startCountdown(endTime, elementId) {
-                        function updateCountdown() {
-                            var now = new Date().getTime();
-                            var timeLeft = endTime - now;
+                    <script>
+                        function startCountdown(endTime, elementId) {
+                            function updateCountdown() {
+                                var now = new Date().getTime();
+                                var timeLeft = endTime - now;
 
-                            if (timeLeft <= 0) {
-                                document.getElementById(elementId).innerHTML = "Auction Ended";
-                                clearInterval(timer);
-                                return;
+                                if (timeLeft <= 0) {
+                                    document.getElementById(elementId).innerHTML = "Auction Ended";
+                                    clearInterval(timer);
+                                    return;
+                                }
+
+                                var hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+                                var minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+                                var seconds = Math.floor((timeLeft / 1000) % 60);
+
+                                document.getElementById(elementId).innerHTML = hours + "h " + minutes + "m " + seconds + "s";
                             }
 
-                            var hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
-                            var minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
-                            var seconds = Math.floor((timeLeft / 1000) % 60);
-
-                            document.getElementById(elementId).innerHTML = hours + "h " + minutes + "m " + seconds + "s";
+                            updateCountdown(); // Call immediately to prevent delay
+                            var timer = setInterval(updateCountdown, 1000);
                         }
 
-                        updateCountdown(); // Call immediately to prevent delay
-                        var timer = setInterval(updateCountdown, 1000);
-                    }
+                        var auctionEndTime = <%= auctionEndTime%>; // Time from server
+                        startCountdown(auctionEndTime, "countdown-<%= i.getId()%>");
+                    </script>
 
-                    var auctionEndTime = <%= auctionEndTime%>; // Time from server
-                    startCountdown(auctionEndTime, "countdown-<%= i.getId()%>");
-                </script>
+                    <%
+                        }
+                    %>
 
-                <%
-                    }
-                %>
-           
 
-                    
+
                 </div>
 
                 <!-- Manual Control Buttons -->
@@ -292,14 +288,14 @@
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
             const cardWidth = 280 + 32; // Card width + space
-            
+
             nextBtn.addEventListener('click', () => {
                 container.scrollBy({
                     left: cardWidth * 4,
                     behavior: 'smooth'
                 });
             });
-            
+
             prevBtn.addEventListener('click', () => {
                 container.scrollBy({
                     left: -cardWidth * 4,
@@ -309,22 +305,22 @@
         </script>
 
         <!-- Categories Section -->
-        <section class="my-8 mt-12">
+        <section class="my-8 mt-12" id="categories">
             <h2 class="text-3xl font-semibold mb-8 md:w-1/2 pl-20">Categories</h2>
             <!-- Grid for Category Cards -->
             <div class="pl-20 flex gap-6 mb-4">
-                <%-- Dynamic Category Data --%>
-                <%                    String[][] categories = {
-                        {"Art", "Paintings & More", "../resources/images/categories/img1.png", "Art Category"},
-                        {"Vehicles", "Cars & Boats", "../resources/images/categories/img2.png", "Vehicles Category"},
-                        {"Furniture", "Modern & Classic", "../resources/images/categories/img3.png", "Furniture Category"},
-                        {"Antiques", "Collectibles", "../resources/images/categories/img4.png", "Antiques Category"},
-                        {"Jewelry", "Fine Jewelry", "../resources/images/categories/img5.png", "Jewelry Category"},
-                        {"Sports", "Equipment", "../resources/images/categories/img6.png", "Sports Category"}
+                <%
+                    String[][] categories = {
+                        {"Art", "Paintings & More", "../resources/images/categories/img1.png", "Art Category", "../item.jsp"},
+                        {"Vehicles", "Cars & Boats", "../resources/images/categories/img2.png", "Vehicles Category", "vehicle.jsp"},
+                        {"Furniture", "Modern & Classic", "../resources/images/categories/img3.png", "Furniture Category", "furniture.jsp"},
+                        {"Antiques", "Collectibles", "../resources/images/categories/img4.png", "Antiques Category", "antiques.jsp"},
+                        {"Jewelry", "Fine Jewelry", "../resources/images/categories/img5.png", "Jewelry Category", "jewelry.jsp"},
+                        {"Sports", "Equipment", "../resources/images/categories/img6.png", "Sports Category", "sports.jsp"}
                     };
                     for (String[] category : categories) {
                 %>
-                <a href="vehicle.jsp" class="block">
+                <a href="<%= category[4]%>" class="block">
                     <div class="w-40 h-[170px] bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                         <div class="h-28 flex items-center justify-center">
                             <img src="<%= category[2]%>" alt="<%= category[3]%>" class="w-4/5 h-[80%] object-contain">
@@ -526,7 +522,7 @@
                 </div>
                 <!-- Copyright and Policies -->
                 <div class="flex flex-col md:flex-row justify-between items-center mt-10">
-                    <p class="text-gray-400">© WinIt 2024 | All rights reserved</p>
+                    <p class="text-gray-400">© WinIt 2025 | All rights reserved</p>
                     <div class="flex space-x-4 mt-4 md:mt-0">
                         <a href="#" class="text-gray-400 hover:text-white">Terms & Conditions</a>
                         <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>

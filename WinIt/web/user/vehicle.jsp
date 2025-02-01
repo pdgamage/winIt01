@@ -29,12 +29,12 @@
     <body class="bg-[#EEEEEE]">
         <!-- Navbar -->
         <nav class="bg-[#0056D2] text-white">
-            <div class="container mx-auto flex justify-between items-center px-4 py-3">
+            <div class="container mx-auto flex justify-between items-center px-4 py-3 whitespace-nowrap">
                 <!-- Logo -->
                 <a href="dash.jsp"><div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div></a>
                 <!-- Search Area -->
                 <div class="mr-10">
-                    <div class="relative w-[480px]">
+                    <div class="relative w-[400px]">
                         <input 
                             type="text" 
                             class="w-full py-2 pl-10 pr-4 rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300" 
@@ -43,11 +43,11 @@
                     </div>
                 </div>
                 <!-- Navigation Links -->
-                <div class="flex space-x-14 items-center">
-                    <a href="liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Live</a>
-                    <a href="categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Categories</a>
-                    <a href="topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Top Picks</a>
-                    <a href="../item.jsp" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Sell an Item</a>
+                <div class="flex space-x-10 items-center">
+                    <a href="liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold" %> text-[18px] font-bold">Live</a>
+                    <a href="categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold" %> text-[18px] font-bold">Categories</a>
+                    <a href="topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold" %> text-[18px] font-bold">Top Picks</a>
+                    <a href="../item.jsp" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold" %> text-[18px] font-bold">Sell an Item</a>
                     <a href="#" class="flex items-center w-8 h-8">
                         <img src="../resources/images/howItWork/user.png" alt="User Icon"/>
                     </a>
@@ -98,44 +98,45 @@
 
         </main>
 
-        <footer class="bg-gray-900 text-white px-8 py-12">
-            <div class="container mx-auto">
-                <div class="flex justify-between mb-12">
-                    <div class="max-w-lg mx-[100px]">
-                        <h2 class="text-2xl font-bold mb-4">Win<span class="text-red-500">It</span></h2>
-                        <p class="text-gray-400 mb-2">WinIt is the leading global platform for online auctions, featuring local auctions happening today, this weekend, and every day.</p>
-                        <p class="text-gray-400">Each week, we showcase thousands of fresh listings from a network of over 15,000 auctioneers across the country.</p>
+        <section class="bg-[#24384B] text-white py-10 mt-40">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <!-- Branding and Description -->
+                    <div class="mb-6 md:mb-0">
+                        <div class="flex items-center mb-4">
+                            <span class="text-2xl font-bold">Win<span class="text-red-500">It</span></span>
+                        </div>
+                        <p class="text-gray-300">WinIt is the leading global platform for online auctions, <br/>featuring local auctions happening today, this weekend, and every day. <br/>Each week, we showcase thousands of fresh listings from a network of over 15,000 auctioneers across the country.</p>
                     </div>
-                    <div class="pr-[200px]">
-                        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-                        <div class="grid grid-cols-2 gap-x-16">
-                            <div>
-                                <p class="text-gray-400 mb-2"><a href="#">Create Account</a></p>
-                                <p class="text-gray-400 mb-2"><a href="#">Categories</a></p>
-                                <p class="text-gray-400"><a href="#">Sell Online</a></p>
-                            </div>
-                            <div>
-                                <p class="text-gray-400 mb-2"><a href="#">About Us</a></p>
-                                <p class="text-gray-400"><a href="#">Contact Us</a></p>
-                            </div>
+                    <!-- Quick Links -->
+                    <div class="flex flex-col md:flex-row md:space-x-10">
+                        <div class="mb-6 md:mb-0 pr-36">
+                            <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                            <ul>
+                                <li><a href="#" class="text-gray-300 hover:text-yellow-500">Create Account</a></li>
+                                <li><a href="#" class="text-gray-300 hover:text-yellow-500">Categories</a></li>
+                                <li><a href="#" class="text-gray-300 hover:text-yellow-500">Sell Online</a></li>
+                                <li><a href="#" class="text-gray-300 hover:text-yellow-500">About Us</a></li>
+                                <li><a href="#" class="text-gray-300 hover:text-yellow-500">Contact Us</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-between items-center pt-8 ">
-                    <p class="text-white pl-[300px]">© WinIt 2024 | All rights reserved</p>
-                    <div class="flex items-center gap-8">
-                        <div class="text-white pr-[300px]">
-                            <a href="#">Terms & Conditions</a>
-                            <span class="mx-2">|</span>
-                            <a href="#">Privacy Policy</a>
-                        </div>
-                        <div class="flex gap-4 pr-[150px]">
-                            <!-- Social Links Here -->
-                        </div>
+                <!-- Copyright and Policies -->
+                <div class="flex flex-col md:flex-row justify-between items-center mt-10">
+                    <p class="text-gray-400">© WinIt 2025 | All rights reserved</p>
+                    <div class="flex space-x-4 mt-4 md:mt-0">
+                        <a href="#" class="text-gray-400 hover:text-white">Terms & Conditions</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                    </div>
+                    <div class="flex space-x-4 mt-4 md:mt-0 pr-36">
+                        <a href="#"><img src="../resources/images/howItWork/facebook.png" alt="Facebook" class="h-6"></a>
+                        <a href="#"><img src="../resources/images/howItWork/twitter.png" alt="Twitter" class="h-6"></a>
+                        <a href="#"><img src="../resources/images/howItWork/instagram.png" alt="Instagram" class="h-6"></a>
                     </div>
                 </div>
             </div>
-        </footer>
+        </section>
 
 
     </body>

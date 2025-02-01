@@ -13,8 +13,8 @@ import java.util.logging.Logger;
  * @author DILSHAN
  */
 public class DbConnector {
-    private static final String DRIVER = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost:3306/project";
+    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String URL = "jdbc:mysql://localhost:3306/project?zeroDateTimeBehavior=CONVERT_TO_NULL";
     private static final String DBUSER = "root";
     private static final String DBPW = ""; 
     
