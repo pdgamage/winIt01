@@ -30,7 +30,7 @@
                 <a href="user/dash.jsp"><div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div></a>
                 <!-- Search Area -->
                 <div class="mr-10">
-                    <div class="relative w-[480px]">
+                    <div class="relative w-[400px]">
                         <input 
                             type="text" 
                             class="w-full py-2 pl-10 pr-4 rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300" 
@@ -40,10 +40,10 @@
                 </div>
                 <!-- Navigation Links -->
                 <div class="flex space-x-14 items-center">
-                    <a href="user/liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Live</a>
-                    <a href="user/categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Categories</a>
-                    <a href="user/topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Top Picks</a>
-                    <a href="" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Sell an Item</a>
+                    <a href="user/liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold"%> text-[18px] font-bold">Live</a>
+                    <a href="user/categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold"%> text-[18px] font-bold">Categories</a>
+                    <a href="user/topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold"%> text-[18px] font-bold">Top Picks</a>
+                    <a href="" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold"%> text-[18px] font-bold">Sell an Item</a>
                     <a href="#" class="flex items-center w-8 h-8">
                         <img src="images/user.png" alt="User Icon"/>
                     </a>
@@ -53,7 +53,7 @@
 
         <!-- Sell Item Form -->
         <main class="container mx-auto px-24 py-8">
-            <div class="flex items-center text-gray-500 font-medium text-sm mt-0">
+            <div class="flex items-center text-gray-500 font-medium text-sm mt-0" >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                 </svg>
@@ -62,10 +62,10 @@
 
             <h2 class="text-2xl font-bold mb-8">Sell an Item</h2>
             <p>Want to sell an item? Create a listing and make the best out of it!</p>
-            <div class="form-container">
+            <div class="form-container" style="background-color: white">
 
 
-                <form action="SellItemServlet" method="post" enctype="multipart/form-data">
+                <form action="SellItemServlet" method="post" enctype="multipart/form-data" >
                      <%
                     if (request.getParameter("s") != null){
                         String message;

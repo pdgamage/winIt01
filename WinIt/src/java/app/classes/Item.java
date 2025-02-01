@@ -18,19 +18,18 @@ import java.io.ByteArrayOutputStream;
  */
 public class Item {
     private int id;
-    private byte[] imageBytes; // Assuming this field stores the image data
     private String firstName;
     private String lastName;
     private String contact;
     private String category;
     private BigDecimal price;
     private String description;
-    private InputStream image;
+    private String image;
 
     public Item() {
     }
 
-    public Item(int id, String firstName, String lastName, String contact, String category, BigDecimal price, String description, InputStream image) {
+    public Item(int id, String firstName, String lastName, String contact, String category, BigDecimal price, String description, String image) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -101,11 +100,11 @@ public class Item {
         this.description = description;
     }
 
-    public InputStream getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(InputStream image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -125,8 +124,9 @@ public class Item {
                     rs.getString("category"),
                     rs.getBigDecimal("price"),
                     rs.getString("description"),
-                    rs.getBinaryStream("image")
+                    rs.getString("image")
                 );
+                System.out.println("Image Path: " + item.getImage());
                 itemList.add(item);
             }
         } catch (SQLException ex) {
@@ -136,34 +136,34 @@ public class Item {
         return itemList;
     }
 
-    // Updated method to convert InputStream to Base64 encoded string
-     // Method to get Base64 encoded image
-    public String getImageBase64() {
-        try {
-            if (imageBytes == null) {
-                return null; // No image available
-            }
-            return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(imageBytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null; // Return null if an error occurs
-        }
-    }
+//    // Updated method to convert InputStream to Base64 encoded string
+//     // Method to get Base64 encoded image
+//    public String getImageBase64() {
+//        try {
+//            if (imageBytes == null) {
+//                return null; // No image available
+//            }
+//            return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(imageBytes);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null; // Return null if an error occurs
+//        }
+//    }
 
-    // Method to set imageBytes from an InputStream
-    public void setImageBytes(InputStream inputStream) {
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-            this.imageBytes = outputStream.toByteArray();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    // Method to set imageBytes from an InputStream
+//    public void setImageBytes(InputStream inputStream) {
+//        try {
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            byte[] buffer = new byte[1024];
+//            int bytesRead;
+//            while ((bytesRead = inputStream.read(buffer)) != -1) {
+//                outputStream.write(buffer, 0, bytesRead);
+//            }
+//            this.imageBytes = outputStream.toByteArray();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
     
     public static Item getItemById(Connection conn, int id) {
     Item item = null;

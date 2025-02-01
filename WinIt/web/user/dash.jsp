@@ -191,37 +191,43 @@
                 <div class="flex space-x-8 overflow-x-hidden w-full pl-20" style="scroll-behavior: smooth;">
 
                     <%
-                        List<Item> itemlist = item.getAllItems(DbConnector.getConnection());
-                        for (Item i : itemlist) {
-                            long auctionEndTime = 0;
-                            try {
-                                Connection conn = DbConnector.getConnection();
-                                String sql = "SELECT created_at FROM SellItems WHERE id = ?";
-                                PreparedStatement stmt = conn.prepareStatement(sql);
-                                stmt.setInt(1, i.getId());
-                                ResultSet rs = stmt.executeQuery();
+    List<Item> itemlist = item.getAllItems(DbConnector.getConnection());
+    for (Item i : itemlist) {
+        long auctionEndTime = 0;
+        String imageUrl = null;  // Variable to hold the image URL
+        try {
+            Connection conn = DbConnector.getConnection();
+            String sql = "SELECT created_at, image FROM SellItems WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, i.getId());
+            ResultSet rs = stmt.executeQuery();
 
-                                if (rs.next()) {
-                                    Timestamp createdAt = rs.getTimestamp("created_at");
-                                    if (createdAt != null) {
-                                        long createdTime = createdAt.getTime();
-                                        auctionEndTime = createdTime + (1 * 10 * 60 * 1000); // 2 hours auction
-                                    }
-                                }
+            if (rs.next()) {
+                Timestamp createdAt = rs.getTimestamp("created_at");
+                if (createdAt != null) {
+                    long createdTime = createdAt.getTime();
+                    auctionEndTime = createdTime + (1 * 10 * 60 * 1000); // 2 hours auction
+                }
 
-                                stmt.close();
-                                conn.close();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                    %>
+                // Fetch image URL
+                imageUrl = rs.getString("image");
+            }
+
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+%>
+
+
 
                     <div class="w-56 bg-white rounded-xl shadow-lg overflow-hidden h-max">
                         <span id="countdown-<%= i.getId()%>" class="top-1 ml-[110px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">
                             Loading...
                         </span>
                         <div class="relative">
-                            <img src="<%= i.getImageBase64()%>" class="w-full h-48 object-cover p-2 rounded-lg" alt="Item Image">
+                            <img src="${pageContext.request.contextPath}/<%= i.getImage() %>" class="w-full h-48 object-cover p-2 rounded-lg" alt="Item Image">
                         </div>
                         <div class="p-4">
                             <h3 class="font-medium text-gray-900"><%= i.getFirstName()%></h3>

@@ -19,8 +19,12 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <style>
-            .hover-gold:hover { color: #F5A623; }
-            .active-link { color: #F5A623; }
+            .hover-gold:hover {
+                color: #F5A623;
+            }
+            .active-link {
+                color: #F5A623;
+            }
         </style>
     </head>
     <body class="bg-[#EEEEEE]">
@@ -29,9 +33,14 @@
         <nav class="bg-[#0056D2] text-white">
             <div class="container mx-auto flex justify-between items-center px-4 py-3 whitespace-nowrap">
                 <a href="dash.jsp"><div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div></a>
+                <!-- Search Area -->
                 <div class="mr-10">
-                    <div class="relative w-[400spx]">
-                        <input type="text" class="w-full py-2 pl-10 pr-4 rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300" placeholder="Search for items..."/>
+                    <div class="relative w-[400px]">
+                        <input 
+                            type="text" 
+                            class="w-full py-2 pl-10 pr-4 rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300" 
+                            placeholder="Search for items..."
+                            />
                     </div>
                 </div>
                 <div class="flex space-x-10 items-center">
@@ -48,6 +57,12 @@
 
         <!-- Main Content -->
         <main class="container mx-auto px-24 py-8">
+            <div class="flex items-center text-gray-500 font-medium text-sm mt-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                <a href="dash.jsp" class="hover:underline">Back to Home</a>
+            </div>
             <h2 class="text-2xl font-bold mb-8">Live Auctions</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-center gap-6">
@@ -76,13 +91,12 @@
                             e.printStackTrace();
                         }
                 %>
-
                 <div class="w-56 bg-white rounded-xl shadow-lg overflow-hidden h-max">
                     <span id="countdown-<%= i.getId()%>" class="top-1 ml-[110px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">
                         Loading...
                     </span>
                     <div class="relative">
-                        <img src="<%= i.getImageBase64()%>" class="w-full h-48 object-cover p-2 rounded-lg" alt="Item Image">
+                        <img src="${pageContext.request.contextPath}/<%= i.getImage() %>" class="w-full h-48 object-cover p-2 rounded-lg" alt="Item Image">
                     </div>
                     <div class="p-4">
                         <h3 class="font-medium text-gray-900"><%= i.getFirstName()%></h3>
@@ -124,7 +138,6 @@
                     var auctionEndTime = <%= auctionEndTime%>; // Time from server
                     startCountdown(auctionEndTime, "countdown-<%= i.getId()%>");
                 </script>
-
                 <%
                     }
                 %>
