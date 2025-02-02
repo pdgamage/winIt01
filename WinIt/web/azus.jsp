@@ -86,7 +86,8 @@
                 <div class="container">
                     <div class="card">
                         <div class="left-section">
-                            <img src="images/img2.jpg" alt="Item Image">
+                            <!-- Display the image -->
+                            <img src="${pageContext.request.contextPath}/<%= item.getImage()%>" alt="Item Image">
                         </div>
                         <div class="right-section">
                             <p class="highest-bid">Base price: <strong>Rs.<%= currentBid%></strong></p>
@@ -111,89 +112,104 @@
         </main>
 
 
-<%
-    Connection conn2 = null;
-    PreparedStatement ps2 = null;
-    ResultSet rs2 = null;
-    // Retrieve item ID from URL
-    String itemIdParam = request.getParameter("id");
-    if (itemIdParam != null && !itemIdParam.trim().isEmpty()) {
-        try {
-            itemId = Integer.parseInt(itemIdParam);
-        } catch (NumberFormatException e) {
-            itemId = -1; // Fallback to show all items if ID is invalid
-        }
-    }
+        <%
+            Connection conn2 = null;
+            PreparedStatement ps2 = null;
+            ResultSet rs2 = null;
+            // Retrieve item ID from URL
+            String itemIdParam = request.getParameter("id");
+            if (itemIdParam != null && !itemIdParam.trim().isEmpty()) {
+                try {
+                    itemId = Integer.parseInt(itemIdParam);
+                } catch (NumberFormatException e) {
+                    itemId = -1; // Fallback to show all items if ID is invalid
+                }
+            }
 
-    try {
-        conn2 = DbConnector.getConnection();
+            try {
+                conn2 = DbConnector.getConnection();
 
-        // Base SQL query
-        String bidQuery = "SELECT u.firstName, b.bid_amount, b.bid_time, s.category " +
-                          "FROM bids b " +
-                          "JOIN user u ON b.user_id = u.id " +
-                          "JOIN sellitems s ON b.item_id = s.id " +
-                          "WHERE b.item_id " + (itemId != -1 ? "= ?" : "IN (SELECT DISTINCT item_id FROM bids)") +
-                          " ORDER BY b.bid_time DESC LIMIT 5";
+                // Base SQL query
+                String bidQuery = "SELECT u.firstName, b.bid_amount, b.bid_time, s.category "
+                        + "FROM bids b "
+                        + "JOIN user u ON b.user_id = u.id "
+                        + "JOIN sellitems s ON b.item_id = s.id "
+                        + "WHERE b.item_id " + (itemId != -1 ? "= ?" : "IN (SELECT DISTINCT item_id FROM bids)")
+                        + " ORDER BY b.bid_time DESC LIMIT 5";
 
-        ps2 = conn2.prepareStatement(bidQuery);
-        if (itemId != -1) {
-            ps2.setInt(1, itemId);
-        }
+                ps2 = conn2.prepareStatement(bidQuery);
+                if (itemId != -1) {
+                    ps2.setInt(1, itemId);
+                }
 
-        rs2 = ps2.executeQuery();
-%>
+                rs2 = ps2.executeQuery();
+        %>
 
-<!-- Recent Bids Section -->
-<section style="background-color: #f3f4f6; padding: 30px 0; margin-bottom: 30px;">
-    <div style="max-width: 1200px; margin: auto; padding: 0 20px;">
-        <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 20px;">
-            <%= (itemId != -1) ? "Bids Details" : "Recent Bids" %>
-        </h2>
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; background-color: white; border-collapse: collapse; border: 1px solid #ddd;">
-                <thead>
-                    <tr style="background-color: #007bff; color: white;">
-                        <th style="padding: 10px; text-align: left;">Bidder Name</th>
-                        <th style="padding: 10px; text-align: left;">Bid Amount (LKR)</th>
-                        <th style="padding: 10px; text-align: left;">Bid Time</th>
-                        <th style="padding: 10px; text-align: left;">Item Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%
-                        boolean hasBids = false;
-                        while (rs2.next()) {
-                            hasBids = true;
-                    %>
-                    <tr style="border-bottom: 1px solid #ddd;">
-                        <td style="padding: 10px;"><%= rs2.getString("firstName") %></td>
-                        <td style="padding: 10px;"><%= rs2.getBigDecimal("bid_amount") %></td>
-                        <td style="padding: 10px;"><%= rs2.getTimestamp("bid_time") %></td>
-                        <td style="padding: 10px;"><%= rs2.getString("category") %></td>
-                    </tr>
-                    <% } %>
+        <!-- Recent Bids Section -->
+        <section style="background-color: #f3f4f6; padding: 30px 0; margin-bottom: 30px;">
+            <div style="max-width: 1200px; margin: auto; padding: 0 20px;">
+                <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 20px;">
+                    <%= (itemId != -1) ? "Bids Details" : "Recent Bids"%>
+                </h2>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; background-color: white; border-collapse: collapse; border: 1px solid #ddd;">
+                        <thead>
+                            <tr style="background-color: #007bff; color: white;">
+                                <th style="padding: 10px; text-align: left;">Bidder Name</th>
+                                <th style="padding: 10px; text-align: left;">Bid Amount (LKR)</th>
+                                <th style="padding: 10px; text-align: left;">Bid Time</th>
+                                <th style="padding: 10px; text-align: left;">Item Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                boolean hasBids = false;
+                                while (rs2.next()) {
+                                    hasBids = true;
+                            %>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px;"><%= rs2.getString("firstName")%></td>
+                                <td style="padding: 10px;"><%= rs2.getBigDecimal("bid_amount")%></td>
+                                <td style="padding: 10px;"><%= rs2.getTimestamp("bid_time")%></td>
+                                <td style="padding: 10px;"><%= rs2.getString("category")%></td>
+                            </tr>
+                            <% } %>
 
-                    <% if (!hasBids) { %>
-                    <tr>
-                        <td colspan="4" style="text-align: center; padding: 15px; color: gray;">No bids placed yet.</td>
-                    </tr>
-                    <% } %>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
+                            <% if (!hasBids) { %>
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 15px; color: gray;">No bids placed yet.</td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
-<%
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        try { if (rs2 != null) rs2.close(); } catch (Exception e) {}
-        try { if (ps2 != null) ps2.close(); } catch (Exception e) {}
-        try { if (conn2 != null) conn2.close(); } catch (Exception e) {}
-    }
-%>
+        <%
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (rs2 != null) {
+                        rs2.close();
+                    }
+                } catch (Exception e) {
+                }
+                try {
+                    if (ps2 != null) {
+                        ps2.close();
+                    }
+                } catch (Exception e) {
+                }
+                try {
+                    if (conn2 != null) {
+                        conn2.close();
+                    }
+                } catch (Exception e) {
+                }
+            }
+        %>
 
         <!-- Footer Section -->
         <section class="bg-[#24384B] text-white py-10 mt-40">
