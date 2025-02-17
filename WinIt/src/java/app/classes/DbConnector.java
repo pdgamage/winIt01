@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package app.classes;
+
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,12 +14,13 @@ import java.util.logging.Logger;
  * @author DILSHAN
  */
 public class DbConnector {
+
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     private static final String URL = "jdbc:mysql://localhost:3306/project";
     private static final String DBUSER = "root";
-    private static final String DBPW = ""; 
-    
-    public static Connection getConnection(){
+    private static final String DBPW = "";
+
+    public static Connection getConnection() {
         Connection con = null;
         try {
             Class.forName(DRIVER);
