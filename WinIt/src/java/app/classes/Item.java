@@ -1,6 +1,7 @@
 package app.classes;
 
 import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.*;
@@ -9,28 +10,22 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Base64;
-import java.io.ByteArrayOutputStream;
 
-
-/**
- *
- * @author DILSHAN
- */
 public class Item {
+
     private int id;
-    private byte[] imageBytes; // Assuming this field stores the image data
     private String firstName;
     private String lastName;
     private String contact;
     private String category;
     private BigDecimal price;
     private String description;
-    private InputStream image;
+    private byte[] imageBytes;
 
     public Item() {
     }
 
-    public Item(int id, String firstName, String lastName, String contact, String category, BigDecimal price, String description, InputStream image) {
+    public Item(int id, String firstName, String lastName, String contact, String category, BigDecimal price, String description, byte[] imageBytes) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,15 +33,10 @@ public class Item {
         this.category = category;
         this.price = price;
         this.description = description;
-        this.image = image;
+        this.imageBytes = imageBytes;
     }
 
-    
-
-    public String getFirstName() {
-        return firstName;
-    }
-
+    // Getter and Setter methods...
     public int getId() {
         return id;
     }
@@ -54,8 +44,10 @@ public class Item {
     public void setId(int id) {
         this.id = id;
     }
-    
-    
+
+    public String getFirstName() {
+        return firstName;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -101,15 +93,23 @@ public class Item {
         this.description = description;
     }
 
-    public InputStream getImage() {
-        return image;
+    public byte[] getImageBytes() {
+        return imageBytes;
     }
 
-    public void setImage(InputStream image) {
-        this.image = image;
+    public void setImageBytes(byte[] imageBytes) {
+        this.imageBytes = imageBytes;
     }
 
-    public List<Item> getAllItems(Connection con) {
+    // Convert image bytes to Base64
+    public String getImageBase64() {
+        if (imageBytes == null || imageBytes.length == 0) {
+            return null;
+        }
+        return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(imageBytes);
+    }
+
+    public static List<Item> getAllItems(Connection con) {
         List<Item> itemList = new ArrayList<>();
 
         try {
@@ -118,83 +118,79 @@ public class Item {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Item item = new Item(
-                    rs.getInt("id"),
-                    rs.getString("firstName"),
-                    rs.getString("lastName"),
-                    rs.getString("contact"),
-                    rs.getString("category"),
-                    rs.getBigDecimal("price"),
-                    rs.getString("description"),
-                    rs.getBinaryStream("image")
+                        rs.getInt("id"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("contact"),
+                        rs.getString("category"),
+                        rs.getBigDecimal("price"),
+                        rs.getString("description"),
+                        rs.getBytes("image") // Fetch image as bytes
                 );
                 itemList.add(item);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Item.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return itemList;
     }
 
-    // Updated method to convert InputStream to Base64 encoded string
-     // Method to get Base64 encoded image
-    public String getImageBase64() {
-        try {
-            if (imageBytes == null) {
-                return null; // No image available
-            }
-            return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(imageBytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null; // Return null if an error occurs
-        }
-    }
-
-    // Method to set imageBytes from an InputStream
-    public void setImageBytes(InputStream inputStream) {
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-            this.imageBytes = outputStream.toByteArray();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
     public static Item getItemById(Connection conn, int id) {
-    Item item = null;
-    try {
-        String query = "SELECT * FROM sellitems WHERE id = ?";
-        PreparedStatement pstmt = conn.prepareStatement(query);
-        pstmt.setInt(1, id);
-        ResultSet rs = pstmt.executeQuery();
-        if (rs.next()) {
-            item = new Item();
-            item.setId(rs.getInt("id"));
-            item.setFirstName(rs.getString("firstName"));
-            item.setLastName(rs.getString("LastName"));
-            item.setDescription(rs.getString("description"));
-            item.setContact(rs.getString("contact"));
-            item.setLastName(rs.getString("LastName"));
-            item.setPrice(rs.getBigDecimal("price"));
-            item.setCategory(rs.getString("category"));
-             
+        Item item = null;
+        try {
+            String query = "SELECT * FROM sellitems WHERE id = ?";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                item = new Item(
+                        rs.getInt("id"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("contact"),
+                        rs.getString("category"),
+                        rs.getBigDecimal("price"),
+                        rs.getString("description"),
+                        rs.getBytes("image")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return item;
     }
-    return item;
+
+    // Method to calculate auction end time for an item
+    public static long getAuctionEndTime(Connection conn, int itemId) throws SQLException {
+        long auctionEndTime = 0;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT created_at FROM sellitems WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, itemId);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Timestamp createdAt = rs.getTimestamp("created_at");
+                if (createdAt != null) {
+                    long createdTime = createdAt.getTime();
+                    auctionEndTime = createdTime + (4 * 60 * 60 * 1000); // 2 hours auction
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstmt != null) {
+                pstmt.close();
+            }
+        }
+        return auctionEndTime;
+    }
+
 }
-    
-    
-    
-   
-
-    
-
-}
-
