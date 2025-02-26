@@ -20,13 +20,13 @@
                 <h2 class="text-2xl font-bold mb-6">Login</h2>
 
                 <%
-                  if(request.getParameter("s")!= null){
-                  if(request.getParameter("s").equals("0")){
-                      %>
-                      <h6 style='color: red'>Incorrect username or password.</h6>
-                      <%
-                  }
-                  }  
+                    if (request.getParameter("s") != null) {
+                        if (request.getParameter("s").equals("0")) {
+                %>
+                <h6 style='color: red'>Incorrect username or password.</h6>
+                <%
+                        }
+                    }
                 %>
                 <form action="login.jsp" method="post" class="space-y-4">
                     <div>
