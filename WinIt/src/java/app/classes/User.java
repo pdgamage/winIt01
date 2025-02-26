@@ -66,8 +66,6 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-    
-    
 
     public boolean register(Connection con) {
 
@@ -127,15 +125,14 @@ public class User {
             pstmt.setInt(1, this.id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-             this.setFirstName(rs.getString("firstName"));   
-             this.setRole(rs.getString("role"));   
-               
+                this.setFirstName(rs.getString("firstName"));
+                this.setRole(rs.getString("role"));
+
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            
-            
+
         }
 
         return this;
