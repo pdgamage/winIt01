@@ -20,10 +20,10 @@
         // Redirect based on user role
         if ("admin".equals(user.getRole())) {
             response.sendRedirect("admin/admin.jsp"); // Redirect to admin dashboard
-        } else if("user".equals(user.getRole())) {
+        } else if ("user".equals(user.getRole())) {
             response.sendRedirect("user/dash.jsp"); // Redirect to user dashboard
         }
     } else {
-        response.sendRedirect("index.jsp"); // Redirect to login page if authentication fails
+        response.sendRedirect("index.jsp?s=0"); // Redirect to login page if authentication fails
     }
 %>
