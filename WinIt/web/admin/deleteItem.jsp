@@ -1,5 +1,5 @@
-<%@page import="app.classes.DbConnector"%>
-<%@ page import="java.sql.*" %>
+<%@page import="app.classes.Admin" %>
+<%@page import="java.sql.SQLException" %>
 
 <%
     int itemId = 0;
@@ -11,53 +11,15 @@
         return;
     }
 
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-
     try {
-        conn = DbConnector.getConnection();
-        if (conn == null) {
-            out.println("Failed to connect to the database.");
-            return;
-        }
-
-        // Step 1: Delete related rows from the `bids` table
-        String deleteBidsSql = "DELETE FROM bids WHERE item_id = ?";
-        pstmt = conn.prepareStatement(deleteBidsSql);
-        pstmt.setInt(1, itemId);
-        pstmt.executeUpdate();
-
-        // Step 2: Delete the item from the `sellitems` table
-        String deleteItemSql = "DELETE FROM sellitems WHERE id = ?";
-        pstmt = conn.prepareStatement(deleteItemSql);
-        pstmt.setInt(1, itemId);
-        int rowsAffected = pstmt.executeUpdate();
-
-        if (rowsAffected > 0) {
-            out.println("Item and related bids deleted successfully.");
+        boolean isDeleted = Admin.deleteItem(itemId);
+        if (isDeleted) {
+            response.sendRedirect("admin.jsp");
         } else {
             out.println("No item found with the specified ID.");
         }
-
-        response.sendRedirect("admin.jsp");
-
     } catch (SQLException e) {
         e.printStackTrace();
         out.println("An error occurred while deleting the item: " + e.getMessage());
-    } finally {
-        if (pstmt != null) {
-            try {
-                pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
     }
 %>
