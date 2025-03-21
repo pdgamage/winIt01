@@ -1,14 +1,8 @@
 <%@page import="app.classes.DbConnector"%>
 <%@page import="java.util.List"%>
 <%@page import="app.classes.Item"%>
-<%@page import="java.sql.*, java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<%!
-    Item item = new Item();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,55 +22,105 @@
         <!-- Navbar -->
         <nav class="bg-[#0056D2] text-white">
             <div class="container mx-auto flex justify-between items-center px-4 py-3">
-                <a href="dash.jsp"><div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div></a>
-                <div class="mr-10">
-                    <div class="relative w-[480px]">
-                        <input type="text" class="w-full py-2 pl-10 pr-4 rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300" placeholder="Search for items..."/>
-                    </div>
-                </div>
+                <a href="dash.jsp" class="text-[30px] font-bold">Win<span class="text-red-500">It</span></a>
+
                 <div class="flex space-x-14 items-center">
-                    <a href="liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Live</a>
-                    <a href="categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Categories</a>
-                    <a href="topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Top Picks</a>
-                    <a href="../item.jsp" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Sell an Item</a>
-                    <a href="#" class="flex items-center w-8 h-8">
-                        <img src="../resources/images/howItWork/user.png" alt="User Icon"/>
-                    </a>
+                    <a href="liveAc.jsp" class="active-link text-[20px] font-bold">Live</a>
+                    <a href="categories.jsp" class="hover-gold text-[20px] font-bold">Categories</a>
+                    <a href="../item.jsp" class="hover-gold text-[20px] font-bold">Sell an Item</a>
+
+                    <div class="relative inline-block text-left">
+                        <!-- User Icon -->
+                        <a href="#" id="userIcon" class="flex items-center w-8 h-8">
+                            <img src="../resources/images/howItWork/user.png" alt="User Icon" class="rounded-full" />
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                            <ul class="py-1">
+
+                                <li>
+                                    <a href="checkout.jsp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        Cart
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="../admin/signout.jsp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        Sign Out
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </nav>
 
-        <!-- Main Content -->
+        <script>
+            const slides = document.querySelectorAll('.slideshow .absolute');
+            let currentSlide = 0;
+
+            function showSlide(index) {
+                // Hide all slides
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('opacity-100');
+                    slide.classList.add('opacity-0');
+                    if (i === index) {
+                        slide.classList.remove('opacity-0');
+                        slide.classList.add('opacity-100');
+                    }
+                });
+            }
+
+            function startSlideshow() {
+                setInterval(() => {
+                    currentSlide = (currentSlide + 1) % slides.length; // Loop through slides
+                    showSlide(currentSlide);
+                }, 3500); // Change slide every 3.5 seconds
+            }
+
+            // Initialize the slideshow
+            showSlide(currentSlide); // Display the first slide
+            startSlideshow();
+
+
+            // Get the user icon and dropdown menu
+            const userIcon = document.getElementById('userIcon');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            // Toggle dropdown visibility on click
+            userIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                dropdownMenu.classList.toggle('hidden');
+            });
+
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!userIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+
+
+
+        </script>
+
+        <% Connection conn = DbConnector.getConnection(); %>
+        <% List<Item> itemList = Item.getAllItems(conn); %>
+
         <main class="container mx-auto px-24 py-8">
+            <div class="flex items-center text-gray-500 font-medium text-sm mt-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                <a href="dash.jsp" class="hover:underline">Back to Home</a>
+            </div>
             <h2 class="text-2xl font-bold mb-8">Live Auctions</h2>
-
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-items-center gap-6">
-                <%
-                    List<Item> itemlist = item.getAllItems(DbConnector.getConnection());
-                    for (Item i : itemlist) {
-                        long auctionEndTime = 0;
-                        try {
-                            Connection conn = DbConnector.getConnection();
-                            String sql = "SELECT created_at FROM SellItems WHERE id = ?";
-                            PreparedStatement stmt = conn.prepareStatement(sql);
-                            stmt.setInt(1, i.getId());
-                            ResultSet rs = stmt.executeQuery();
-
-                            if (rs.next()) {
-                                Timestamp createdAt = rs.getTimestamp("created_at");
-                                if (createdAt != null) {
-                                    long createdTime = createdAt.getTime();
-                                    auctionEndTime = createdTime + (1 * 10 * 60 * 1000); // 2 hours auction
-                                }
-                            }
-
-                            stmt.close();
-                            conn.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                %>
-
+                <% for (Item i : itemList) {%>
                 <div class="w-56 bg-white rounded-xl shadow-lg overflow-hidden h-max">
                     <span id="countdown-<%= i.getId()%>" class="top-1 ml-[110px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">
                         Loading...
@@ -87,47 +131,36 @@
                     <div class="p-4">
                         <h3 class="font-medium text-gray-900"><%= i.getFirstName()%></h3>
                         <div class="flex justify-between items-center mt-2">
-                            <div class="flex space-x-[35px]">
-                                <p class="font-semibold">Rs.<%= i.getPrice()%></p>
-                                <p class="text-sm text-gray-500"><%= i.getCategory()%></p>
-                            </div>
+                            <p class="font-semibold">Rs.<%= i.getPrice()%></p>
+                            <p class="text-sm text-gray-500"><%= i.getCategory()%></p>
                         </div>
-                        <a href="../azus.jsp?id=<%= i.getId()%>">
+                        <a href="azus.jsp?id=<%= i.getId()%>">
                             <button class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Place your bid</button>
                         </a>
                     </div>
                 </div>
-
                 <script>
                     function startCountdown(endTime, elementId) {
                         function updateCountdown() {
                             var now = new Date().getTime();
                             var timeLeft = endTime - now;
-
                             if (timeLeft <= 0) {
                                 document.getElementById(elementId).innerHTML = "Auction Ended";
                                 clearInterval(timer);
                                 return;
                             }
-
                             var hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
                             var minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
                             var seconds = Math.floor((timeLeft / 1000) % 60);
-
                             document.getElementById(elementId).innerHTML = hours + "h " + minutes + "m " + seconds + "s";
                         }
-
-                        updateCountdown(); // Call immediately to prevent delay
+                        updateCountdown();
                         var timer = setInterval(updateCountdown, 1000);
                     }
-
-                    var auctionEndTime = <%= auctionEndTime%>; // Time from server
+                    var auctionEndTime = <%= Item.getAuctionEndTime(conn, i.getId())%>;
                     startCountdown(auctionEndTime, "countdown-<%= i.getId()%>");
                 </script>
-
-                <%
-                    }
-                %>
+                <% }%>
             </div>
         </main>
 

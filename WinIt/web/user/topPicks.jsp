@@ -18,7 +18,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>WinIt - Live Auctions</title>
         <script src="https://cdn.tailwindcss.com"></script>
-        
+
         <style>
             .hover-gold:hover {
                 color: #F5A623; /* Gold hover effect */
@@ -45,10 +45,10 @@
                 </div>
                 <!-- Navigation Links -->
                 <div class="flex space-x-14 items-center">
-                    <a href="liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Live</a>
-                    <a href="categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Categories</a>
-                    <a href="topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Top Picks</a>
-                    <a href="../item.jsp" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold" %> text-[20px] font-bold">Sell an Item</a>
+                    <a href="liveAc.jsp" class="<%= request.getRequestURI().contains("liveAc.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Live</a>
+                    <a href="categories.jsp" class="<%= request.getRequestURI().contains("categories.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Categories</a>
+                    <a href="topPicks.jsp" class="<%= request.getRequestURI().contains("topPicks.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Top Picks</a>
+                    <a href="../item.jsp" class="<%= request.getRequestURI().contains("item.jsp") ? "active-link" : "hover-gold"%> text-[20px] font-bold">Sell an Item</a>
                     <a href="#" class="flex items-center w-8 h-8">
                         <img src="../resources/images/howItWork/user.png" alt="User Icon"/>
                     </a>

@@ -5,28 +5,20 @@
 <%@page import="app.classes.DbConnector"%>
 <%@page import="app.classes.User"%>
 
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%!User user = new User();
-
-    Item item = new Item();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
 %>
 <%
     if (session.getAttribute("user_id") != null) {
         int user_id = (Integer) session.getAttribute("user_id");
         user.setId(user_id);
-        user =  user.getUserById(DbConnector.getConnection());
+        user = user.getUserById(DbConnector.getConnection());
         session.setAttribute("user_id", user_id);
-        
-        
     } else {
-        
         response.sendRedirect("../index.jsp");
     }
-    
-
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,32 +33,20 @@
                 color: #F5A623; /* Gold hover effect */
             }
         </style>
-
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     </head>
     <body class="bg-[#EEEEEE]">
-       
 
         <!-- Navbar -->
         <nav class="bg-[#0056D2] text-white">
             <div class="container mx-auto flex justify-between items-center px-4 py-3">
                 <!-- Logo -->
                 <div class="text-[30px] font-bold">Win<span class="text-red-500">It</span></div>
-                <!-- Search Area -->
-                <div class="mr-10">
-                    <div class="relative w-[480px]">
-                        <input 
-                            type="text" 
-                            class="w-full py-2 pl-10 pr-4 rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300" 
-                            placeholder="Search for items..."
-                            />
-                    </div>
-                </div>
+
                 <!-- Navigation Links -->
                 <div class="flex space-x-14 items-center">
                     <a href="liveAc.jsp" class="hover-gold text-[20px] font-bold">Live</a>
                     <a href="categories.jsp" class="hover-gold text-[20px] font-bold">Categories</a>
-                    <a href="topPicks.jsp" class="hover-gold text-[20px] font-bold">Top Picks</a>
                     <a href="../item.jsp" class="hover-gold text-[20px] font-bold">Sell an Item</a>
                     <h2 class="text-[20px] text-blue-200 font-bold">Hello, <%=user.getFirstName()%> !</h2>
 
@@ -81,8 +61,8 @@
                         <!-- Dropdown Menu -->
                         <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                             <ul class="py-1">
-                                
-                                 <li>
+
+                                <li>
                                     <a href="checkout.jsp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         Cart
                                     </a>
@@ -93,7 +73,7 @@
                                         Sign Out
                                     </a>
                                 </li>
-                               
+
                             </ul>
                         </div>
                     </div>
@@ -108,9 +88,7 @@
                 <!-- Left Content -->
                 <div class="w-full md:w-1/2">
                     <h3 class="text-4xl font-bold text-black mb-4">Win<span class="text-red-500">It</span></h3>
-                    <p class="text-lg text-gray-600">
-                        The ultimate hub for bidding, selling, and winning.
-                    </p>
+                    <p class="text-lg text-gray-600">The ultimate hub for bidding, selling, and winning.</p>
                 </div>
                 <!-- Right Content (Slideshow) -->
                 <div class="w-full md:w-1/2 relative h-[430px] rounded-lg overflow-hidden shadow-lg slideshow">
@@ -131,7 +109,7 @@
         <script>
             const slides = document.querySelectorAll('.slideshow .absolute');
             let currentSlide = 0;
-            
+
             function showSlide(index) {
                 // Hide all slides
                 slides.forEach((slide, i) => {
@@ -143,38 +121,38 @@
                     }
                 });
             }
-            
+
             function startSlideshow() {
                 setInterval(() => {
                     currentSlide = (currentSlide + 1) % slides.length; // Loop through slides
                     showSlide(currentSlide);
                 }, 3500); // Change slide every 3.5 seconds
             }
-            
+
 // Initialize the slideshow
             showSlide(currentSlide); // Display the first slide
             startSlideshow();
-            
-            
-            // Get the user icon and dropdown menu
+
+
+// Get the user icon and dropdown menu
             const userIcon = document.getElementById('userIcon');
             const dropdownMenu = document.getElementById('dropdownMenu');
-            
+
 // Toggle dropdown visibility on click
             userIcon.addEventListener('click', (e) => {
                 e.preventDefault();
                 dropdownMenu.classList.toggle('hidden');
             });
-            
+
 // Hide dropdown when clicking outside
             document.addEventListener('click', (e) => {
                 if (!userIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
                     dropdownMenu.classList.add('hidden');
                 }
             });
-            
-            
-            
+
+
+
         </script>
 
 
@@ -184,97 +162,67 @@
             <div class="flex items-center justify-between w-full pr-36">
                 <h2 class="text-3xl font-semibold mb-10 md:w-1/2 pl-20">Live Auctions</h2>
                 <a href="liveAc.jsp">
-                    <button class="text-[#0056D2] border-2 border-[#0056D2] py-1 px-4 rounded-lg hover:bg-[#0056D2] hover:text-white text-sm font-medium">
-                        View All
-                    </button>
+                    <button class="text-[#0056D2] border-2 border-[#0056D2] py-1 px-4 rounded-lg hover:bg-[#0056D2] hover:text-white text-sm font-medium">View All</button>
                 </a>
-
             </div>
             <div class="relative overflow-hidden">
-
                 <div class="flex space-x-8 overflow-x-hidden w-full pl-20" style="scroll-behavior: smooth;">
-                    
-                <%
-                    List<Item> itemlist = item.getAllItems(DbConnector.getConnection());
-                    for (Item i : itemlist) {
-                        long auctionEndTime = 0;
-                        try {
-                            Connection conn = DbConnector.getConnection();
-                            String sql = "SELECT created_at FROM SellItems WHERE id = ?";
-                            PreparedStatement stmt = conn.prepareStatement(sql);
-                            stmt.setInt(1, i.getId());
-                            ResultSet rs = stmt.executeQuery();
-
-                            if (rs.next()) {
-                                Timestamp createdAt = rs.getTimestamp("created_at");
-                                if (createdAt != null) {
-                                    long createdTime = createdAt.getTime();
-                                    auctionEndTime = createdTime + (1 * 10 * 60 * 1000); // 2 hours auction
-                                }
-                            }
-
-                            stmt.close();
-                            conn.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                %>
-
-                <div class="w-56 bg-white rounded-xl shadow-lg overflow-hidden h-max">
-                    <span id="countdown-<%= i.getId()%>" class="top-1 ml-[110px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">
-                        Loading...
-                    </span>
-                    <div class="relative">
-                        <img src="<%= i.getImageBase64()%>" class="w-full h-48 object-cover p-2 rounded-lg" alt="Item Image">
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-medium text-gray-900"><%= i.getFirstName()%></h3>
-                        <div class="flex justify-between items-center mt-2">
-                            <div class="flex space-x-[35px]">
-                                <p class="font-semibold">Rs.<%= i.getPrice()%></p>
-                                <p class="text-sm text-gray-500"><%= i.getCategory()%></p>
-                            </div>
+                    <%
+                        Connection conn = DbConnector.getConnection();
+                        List<Item> itemList = Item.getAllItems(conn);
+                        for (Item i : itemList) {
+                            long auctionEndTime = Item.getAuctionEndTime(conn, i.getId());
+                    %>
+                    <div class="w-56 bg-white rounded-xl shadow-lg overflow-hidden h-max flex-shrink-0">
+                        <span id="countdown-<%= i.getId()%>" class="top-1 ml-[110px] bg-white rounded-lg px-2 py-1 text-sm text-orange-500 font-medium">Loading...</span>
+                        <div class="relative">
+                            <img src="<%= i.getImageBase64()%>" class="w-full h-48 object-cover p-2 rounded-lg" alt="Item Image">
                         </div>
-                        <a href="../azus.jsp?id=<%= i.getId()%>">
-                            <button class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Place your bid</button>
-                        </a>
+                        <div class="p-4">
+                            <h3 class="font-medium text-gray-900"><%= i.getFirstName()%></h3>
+                            <div class="flex justify-between items-center mt-2">
+                                <div class="flex space-x-[35px]">
+                                    <p class="font-semibold">Rs.<%= i.getPrice()%></p>
+                                    <p class="text-sm text-gray-500"><%= i.getCategory()%></p>
+                                </div>
+                            </div>
+                            <a href="azus.jsp?id=<%= i.getId()%>">
+                                <button class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Place your bid</button>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                    <script>
+                        function startCountdown(endTime, elementId) {
+                            function updateCountdown() {
+                                var now = new Date().getTime();
+                                var timeLeft = endTime - now;
 
-                <script>
-                    function startCountdown(endTime, elementId) {
-                        function updateCountdown() {
-                            var now = new Date().getTime();
-                            var timeLeft = endTime - now;
+                                if (timeLeft <= 0) {
+                                    document.getElementById(elementId).innerHTML = "Auction Ended";
+                                    clearInterval(timer);
+                                    return;
+                                }
 
-                            if (timeLeft <= 0) {
-                                document.getElementById(elementId).innerHTML = "Auction Ended";
-                                clearInterval(timer);
-                                return;
+                                var hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+                                var minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+                                var seconds = Math.floor((timeLeft / 1000) % 60);
+
+                                document.getElementById(elementId).innerHTML = hours + "h " + minutes + "m " + seconds + "s";
                             }
 
-                            var hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
-                            var minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
-                            var seconds = Math.floor((timeLeft / 1000) % 60);
-
-                            document.getElementById(elementId).innerHTML = hours + "h " + minutes + "m " + seconds + "s";
+                            updateCountdown(); // Call immediately to prevent delay
+                            var timer = setInterval(updateCountdown, 1000);
                         }
 
-                        updateCountdown(); // Call immediately to prevent delay
-                        var timer = setInterval(updateCountdown, 1000);
-                    }
-
-                    var auctionEndTime = <%= auctionEndTime%>; // Time from server
-                    startCountdown(auctionEndTime, "countdown-<%= i.getId()%>");
-                </script>
-
-                <%
-                    }
-                %>
-           
-
-                    
+                        var auctionEndTime = <%= auctionEndTime%>; // Time from server
+                        startCountdown(auctionEndTime, "countdown-<%= i.getId()%>");
+                    </script>
+                    <%
+                        }
+                        conn.close();
+                    %>
                 </div>
+
 
                 <!-- Manual Control Buttons -->
                 <button id="prev-btn" class="absolute left-12 top-1/2 transform -translate-y-1/2 p-2 rounded-full">
@@ -286,20 +234,19 @@
             </div>
         </section>
 
-        <!-- JavaScript -->
         <script>
             const container = document.querySelector('.flex.space-x-8');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
             const cardWidth = 280 + 32; // Card width + space
-            
+
             nextBtn.addEventListener('click', () => {
                 container.scrollBy({
                     left: cardWidth * 4,
                     behavior: 'smooth'
                 });
             });
-            
+
             prevBtn.addEventListener('click', () => {
                 container.scrollBy({
                     left: -cardWidth * 4,
@@ -307,24 +254,23 @@
                 });
             });
         </script>
-
         <!-- Categories Section -->
         <section class="my-8 mt-12">
             <h2 class="text-3xl font-semibold mb-8 md:w-1/2 pl-20">Categories</h2>
             <!-- Grid for Category Cards -->
             <div class="pl-20 flex gap-6 mb-4">
-                <%-- Dynamic Category Data --%>
-                <%                    String[][] categories = {
-                        {"Art", "Paintings & More", "../resources/images/categories/img1.png", "Art Category"},
-                        {"Vehicles", "Cars & Boats", "../resources/images/categories/img2.png", "Vehicles Category"},
-                        {"Furniture", "Modern & Classic", "../resources/images/categories/img3.png", "Furniture Category"},
-                        {"Antiques", "Collectibles", "../resources/images/categories/img4.png", "Antiques Category"},
-                        {"Jewelry", "Fine Jewelry", "../resources/images/categories/img5.png", "Jewelry Category"},
-                        {"Sports", "Equipment", "../resources/images/categories/img6.png", "Sports Category"}
+                <%
+                    String[][] categories = {
+                        {"Art", "Paintings & More", "../resources/images/categories/img1.png", "Art Category", "../category/art.jsp"},
+                        {"Vehicles", "Cars & Boats", "../resources/images/categories/img2.png", "Vehicles Category", "../category/vehicles.jsp"},
+                        {"Furniture", "Modern & Classic", "../resources/images/categories/img3.png", "Furniture Category", "../category/furniture.jsp"},
+                        {"Antiques", "Collectibles", "../resources/images/categories/img4.png", "Antiques Category", "../category/antique.jsp"},
+                        {"Jewelry", "Fine Jewelry", "../resources/images/categories/img5.png", "Jewelry Category", "../category/jewelry.jsp"},
+                        {"Sports", "Equipment", "../resources/images/categories/img6.png", "Sports Category", "../category/sports.jsp"}
                     };
                     for (String[] category : categories) {
                 %>
-                <a href="vehicle.jsp" class="block">
+                <a href="<%= category[4]%>" class="block">
                     <div class="w-40 h-[170px] bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                         <div class="h-28 flex items-center justify-center">
                             <img src="<%= category[2]%>" alt="<%= category[3]%>" class="w-4/5 h-[80%] object-contain">
@@ -337,20 +283,18 @@
                 </a>
                 <% } %>
             </div>
-
             <!-- Second Row - 4 Cards -->
             <div class="pl-20 flex gap-6">
-                <%-- Dynamic Category Data for Second Row --%>
                 <%
                     String[][] secondRowCategories = {
-                        {"Fashion", "Luxury Items", "../resources/images/categories/img7.png", "Fashion Category"},
-                        {"Toys", "Collectibles", "../resources/images/categories/img8.png", "Toys Category"},
-                        {"Electronics", "Computers", "../resources/images/categories/img9.png", "Electronics Category"},
-                        {"Real Estate", "Properties", "../resources/images/categories/img10.png", "Real Estate Category"}
+                        {"Fashion", "Luxury Items", "../resources/images/categories/img7.png", "Fashion Category", "../category/fashion.jsp"},
+                        {"Toys", "Collectibles", "../resources/images/categories/img8.png", "Toys Category", "../category/toys.jsp"},
+                        {"Electronics", "Computers", "../resources/images/categories/img9.png", "Electronics Category", "../category/electronics.jsp"},
+                        {"Real Estate", "Properties", "../resources/images/categories/img10.png", "Real Estate Category", "../category/realestate.jsp"}
                     };
                     for (String[] category : secondRowCategories) {
                 %>
-                <a href="#" class="block">
+                <a href="<%= category[4]%>" class="block">
                     <div class="w-40 h-[170px] bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                         <div class="h-28 flex items-center justify-center">
                             <img src="<%= category[2]%>" alt="<%= category[3]%>" class="w-4/5 h-[80%] object-contain">
@@ -380,10 +324,8 @@
                             <p class="text-sm text-gray-600">Complete the registration process <br> easily and quickly.</p>
                         </div>
                     </div>
-
                     <!-- Arrow -->
                     <img src="../resources/images/howItWork/arrow.png" alt="Arrow Icon" class="h-12 mt-12" />
-
                     <!-- Step 2: Buy or Bid -->
                     <div class="flex flex-col justify-center items-center">
                         <div class="flex justify-center items-center w-[150px] h-[150px] rounded-full bg-[#BFDBFE]">
@@ -394,10 +336,8 @@
                             <p class="text-sm text-gray-600">Search and browse through items.</p>
                         </div>
                     </div>
-
                     <!-- Arrow -->
                     <img src="../resources/images/howItWork/arrow.png" alt="Arrow Icon" class="h-12 mt-12" />
-
                     <!-- Step 3: Submit a Bid -->
                     <div class="flex flex-col justify-center items-center">
                         <div class="flex justify-center items-center w-[150px] h-[150px] rounded-full bg-[#BFDBFE]">
@@ -408,10 +348,8 @@
                             <p class="text-sm text-gray-600">Bid on your favorite items quickly.</p>
                         </div>
                     </div>
-
                     <!-- Arrow -->
                     <img src="../resources/images/howItWork/arrow.png" alt="Arrow Icon" class="h-12 mt-12" />
-
                     <!-- Step 4: Win -->
                     <div class="flex flex-col justify-center items-center">
                         <div class="flex justify-center items-center w-[150px] h-[150px] rounded-full bg-[#BFDBFE]">
@@ -426,77 +364,6 @@
             </div>
         </section>
 
-        <!-- Top Picks Section -->
-        <section class="max-w-7xl mx-auto my-8 px-6 flex items-center mt-16">
-            <!-- Heading and Button Container -->
-            <div class="flex items-center justify-between w-full">
-                <h2 class="text-3xl font-semibold mb-10">Top Picks</h2>
-                <a href="topPicks.jsp">
-                    <button class="text-[#0056D2] border-2 border-[#0056D2] py-1 px-4 rounded-lg hover:bg-[#0056D2] hover:text-white text-sm font-medium">
-                        View All
-                    </button>
-                </a>
-
-            </div>
-        </section>
-
-        <div class="max-w-7xl mx-auto mt-6 px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Card 1 -->
-            <div class="bg-white shadow-md rounded-lg overflow-hidden w-[280px] h-[380px] mx-auto">
-                <img src="../resources/images/liveAuction/img8.jpg" alt="Luxury Apartment - Kandy" class="w-full h-[200px] object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Toyota tundra - Colombo</h3>
-                    <p class="text-gray-600 mb-4">
-                        LKR 10,000,000 <span class="font-bold text-blue-600 ml-[55px]">40 bids</span>
-                    </p>
-                    <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-                        Place your Bid
-                    </button>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-white shadow-md rounded-lg overflow-hidden w-[280px] h-[380px] mx-auto">
-                <img src="../resources/images/liveAuction/img3.jpg" alt="Honda Civic 2019" class="w-full h-[200px] object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Luxury Villa - Kandy</h3>
-                    <p class="text-gray-600 mb-4">
-                        LKR 30,000,000 <span class="font-bold text-blue-600 ml-[55px]">35 bids</span>
-                    </p>
-                    <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-                        Place your Bid
-                    </button>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-white shadow-md rounded-lg overflow-hidden w-[280px] h-[380px] mx-auto">
-                <img src="../resources/images/liveAuction/img10.jpg" alt="Asus Rog Strix Laptop" class="w-full h-[200px] object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Beachfront Property - Galle</h3>
-                    <p class="text-gray-600 mb-4">
-                        LKR 20,000,000 <span class="font-bold text-blue-600 ml-[55px]">38 bids</span>
-                    </p>
-                    <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-                        Place your Bid
-                    </button>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="bg-white shadow-md rounded-lg overflow-hidden w-[280px] h-[380px] mx-auto">
-                <img src="../resources/images/liveAuction/img1.jpg" alt="Study Table" class="w-full h-[200px] object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Mountain Retreat - Kandy</h3>
-                    <p class="text-gray-600 mb-4">
-                        LKR 27,000,000  <span class="font-bold text-blue-600 ml-[55px]">35 bids</span>
-                    </p>
-                    <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-                        Place your Bid
-                    </button>
-                </div>
-            </div>
-        </div>
 
 
         <!-- Footer Section -->
@@ -539,6 +406,5 @@
                 </div>
             </div>
         </section>
-
     </body>
 </html>
